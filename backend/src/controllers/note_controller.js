@@ -78,3 +78,35 @@ export const deleteNote = async (req, res) => {
     });
   }
 };
+
+export const updateNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        message: "ID не найден",
+      });
+    }
+
+    const { content } = req.body;
+
+    if (!content) {
+      return res.status(400).json({
+        message: "Содержание не найдено",
+      });
+    }
+
+    const note = await prisma.note.update({
+      where: { id },
+      data: { content },
+    });
+
+    res.json(note);
+  } catch (e) {
+    res.status(500).json({
+      message: "Заметка не обновлена",
+      error: e.message,
+    });
+  }
+};

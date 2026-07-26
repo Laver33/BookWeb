@@ -75,3 +75,28 @@ export const deleteAuthor = async (req, res) => {
     });
   }
 };
+
+export const updateAuthor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, surname } = req.body;
+
+    const updateAuthor = await prisma.author.update({
+      where: { id },
+      data: { name, surname },
+    });
+
+    if (!updateAuthor) {
+      return res.status(404).json({
+        message: "Автор не найден",
+      });
+    }
+
+    res.json(updateAuthor);
+  } catch (e) {
+    res.status(500).json({
+      message: "Автор не найден",
+      error: e.message,
+    });
+  }
+};

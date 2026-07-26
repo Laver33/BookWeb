@@ -2,6 +2,7 @@ model Book {
   id String @id @default(cuid())
   title String @unique 
   description String?
+  price Float?
   createdAt DateTime @default(now()) @map("created_at")
   authorId String 
 

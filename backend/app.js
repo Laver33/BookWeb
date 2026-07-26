@@ -19,6 +19,7 @@ app.listen(port, () => {
 });
 
 // Операции над книгами
+app.post("/book", bookController.createBook); // создать
 app.get("/books", bookController.findBooks);
 app.get("/book:id", bookController.findBook);
 app.delete("/book:id", bookController.deleteBook);
@@ -26,12 +27,15 @@ app.delete("/books", bookController.deleteAllBooks);
 app.put("/book:id", bookController.updateBook);
 
 // Операции над авторами
+app.post("/author", authorController.createAuthor); // создать
 app.get("/authors", authorController.findAuthors);
 app.get("/author:id", authorController.findAuthor);
 app.delete("/author:id", authorController.deleteAuthor);
-// app.put("/author:id", authorController.updateAuthor);
+app.put("/author:id", authorController.updateAuthor);
 
 // Операции над заметками
+app.post("/note", noteController.createNote); // создать
 app.get("/notes", noteController.findNotes);
 app.get("/note:id", noteController.findNote);
 app.delete("/book:id", noteController.deleteNote);
+app.put("/author:id", authorController.updateNote);
