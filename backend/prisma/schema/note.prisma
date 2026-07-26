@@ -1,0 +1,8 @@
+model Note {
+  id Int @id @default(autoincrement())
+  content String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  bookId String
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}

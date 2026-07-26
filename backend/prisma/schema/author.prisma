@@ -1,0 +1,14 @@
+model Author {
+  id String @id @default(cuid())
+  email String @unique
+  name String
+  surname String 
+  description String?
+  
+  createdAt DateTime @default(now()) @map("created_at")
+
+  books Book[]
+
+
+}
+

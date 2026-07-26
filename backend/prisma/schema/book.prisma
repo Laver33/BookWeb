@@ -1,0 +1,10 @@
+model Book {
+  id String @id @default(cuid())
+  title String @unique 
+  description String?
+  createdAt DateTime @default(now()) @map("created_at")
+  authorId String 
+
+  author Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  notes Note[]
+}
