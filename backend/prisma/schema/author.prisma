@@ -4,6 +4,7 @@ model Author {
   name String
   surname String 
   description String?
+  age Int?
 
   hashedPassword String @map("hashed_password")
   
