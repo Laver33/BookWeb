@@ -48,9 +48,14 @@ const RegisterPage = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-0 m-0 bg-gray-200">
-      <div className="flex items-center justify-center bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl w-full">
+      <motion.div
+        className="flex items-center justify-center bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl w-full"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
         {/* Форма */}
-        <div className="w-1/2 p-8">
+        <motion.div className="w-1/2 p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <h2 className="text-2xl font-bold text-center mb-6">Регистрация</h2>
 
@@ -147,17 +152,21 @@ const RegisterPage = () => {
               </motion.button>
             </div>
           </form>
-        </div>
+        </motion.div>
 
         {/* Изображение справа */}
-        <div className="w-1/2 h-full text-cyan-200">
+        <motion.div
+          className="w-1/2 h-full text-cyan-200"
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2 }}
+        >
           <img
             src={AuthIcon}
             alt="Изображение для авторизации и регистрации"
             className="w-full h-full object-cover"
           />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

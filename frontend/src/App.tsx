@@ -13,10 +13,13 @@ function Layout() {
   return (
     <div>
       {/* Навигационное меню */}
-      <Navigate />
+      <div className="flex">
+        {/* <p>fffsfs</p> */}
+        <Navigate />
+      </div>
 
       {/* Контент страницы */}
-      <div className="container mx-auto p-4">
+      <div>
         <Outlet />
       </div>
     </div>
