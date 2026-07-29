@@ -8,6 +8,7 @@ import AuthorDetailPage from "./pages/AuthorDetailPage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import Navigate from "./components/Navigate";
+import Footer from "./components/Footer";
 
 function Layout() {
   return (
@@ -19,9 +20,14 @@ function Layout() {
       </div>
 
       {/* Контент страницы */}
-      <div>
+      <div className="pb-16">
         <Outlet />
       </div>
+
+      {/* Подвал */}
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }
@@ -36,6 +42,7 @@ function AppContent() {
 
         {/* Защищенные маршруты*/}
         <Route element={<Layout />}>
+          {/* <Route path="/top" element={<TopPage />} /> */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/book/:id" element={<BookPage />} />

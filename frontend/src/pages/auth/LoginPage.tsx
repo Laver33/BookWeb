@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import AuthIcon from "../../assets/AuthImage.jpg";
+import AuthIcon from "../../components/AuthImage";
 
 const loginSchema = z.object({
   name: z.string().min(2, { message: "Имя должно быть не менее 2 символов" }),
@@ -39,7 +39,7 @@ const LoginPage = () => {
   return (
     <div className="flex items-center justify-center min-h-screen p-0 m-0 bg-gray-200">
       <motion.div
-        className="flex items-center justify-center bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl w-full"
+        className="flex items-center justify-center bg-white rounded-lg shadow-2xl overflow-hidden max-w-4xl w-full"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -95,17 +95,17 @@ const LoginPage = () => {
 
             <div className="flex flex-col gap-3 mt-6">
               <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scaleY: 0.98, scaleX: 1.03 }}
                 onClick={handleSubmit(onSubmit)}
                 disabled={isSubmitting}
-                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:opacity-50 transition-colors"
+                className="w-full bg-amber-700 font-medium hover:bg-amber-800 text-white py-3 px-2 rounded disabled:opacity-50 transition-colors"
               >
                 {isSubmitting ? "Загрузка..." : "Войти"}
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.02 }}
-                className="w-full bg-white text-blue-500 p-2 rounded  hover:text-blue-600 duration-1000 disabled:opacity-50 transition-colors"
+                className="w-full bg-white text-gray-900 font-medium p-2 rounded  hover:text-gray-800 duration-1000 disabled:opacity-50 transition-colors"
                 onClick={() => {
                   navigate("/register");
                 }}
@@ -117,18 +117,7 @@ const LoginPage = () => {
         </div>
 
         {/* Изображение справа */}
-        <motion.div
-          className="w-1/2 h-full text-cyan-200"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2 }}
-        >
-          <img
-            src={AuthIcon}
-            alt="Изображение для авторизации и регистрации"
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
+        <AuthIcon />
       </motion.div>
     </div>
   );

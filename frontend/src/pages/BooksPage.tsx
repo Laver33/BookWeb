@@ -1,5 +1,72 @@
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
+import useFetchAllData from "../hooks/dataFetch";
+import useBookStore from "../store/bookStore.ts";
+
 const BooksPage = () => {
-  return <></>;
+  useFetchAllData();
+  const { books } = useBookStore();
+  const navigate = useNavigate();
+
+  return (
+    <div className="flex gap-12 px-16 pt-16">
+      {/* Настройки */}
+      <motion.section
+        className="w-3/12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-4 gap-3 flex border border-amber-100">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300"
+          >
+            Добавить книгу
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300"
+          >
+            Топ авторов
+          </motion.button>
+        </div>
+      </motion.section>
+
+      {/* Список книг */}
+      {books.length === 0 ? (
+        <section className="justify-center flex items-center w-full h-[70vh]">
+          <p className="text-4xl font-bold text-gray-900">Книги не найдены</p>
+        </section>
+      ) : (
+        <motion.section
+          className="w-9/12 grid grid-cols-4 gap-4"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          {books.map((item) => (
+            <motion.div
+              key={item.id}
+              className="bg-white/80 backdrop-blur-sm min-w-50 p-4 rounded-2xl shadow-xl border border-amber-100 hover:shadow-2xl transition-shadow duration-300"
+            >
+              <p className="mb-2 font-semibold text-gray-900">{item.title}</p>
+              <p className="text-gray-700">
+                Опис: {item.description.slice(0, 100)}
+              </p>
+              <p className="mt-2 font-medium text-amber-700">{item.price}$</p>
+              <button
+                onClick={() => navigate(`/book/${item.id}`)}
+                className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-1.5 rounded-lg mt-3 w-full shadow-md transition-colors duration-300"
+              >
+                Перейти
+              </button>
+            </motion.div>
+          ))}
+        </motion.section>
+      )}
+    </div>
+  );
 };
 
 export default BooksPage;

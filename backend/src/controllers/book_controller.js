@@ -124,3 +124,40 @@ export const updateBook = async (req, res) => {
     });
   }
 };
+
+export const createBook = async (req, res) => {
+  try {
+    const { title, description, authorId, price } = req.body;
+
+    if (!title || !description || !authorId) {
+      return res.status(400).json({
+        message: "Не все обязательные поля заполнены",
+      });
+    }
+
+    const authorExists = await prisma.author.findUnique({
+      where: { id: authorId },
+    });
+    if (!authorExists) {
+      return res.status(404).json({
+        message: "Автор с таким ID не найден",
+      });
+    }
+
+    const book = await prisma.book.create({
+      data: {
+        title,
+        description,
+        authorId,
+        price: price || 0,
+      },
+    });
+
+    res.status(201).json(book);
+  } catch (e) {
+    res.status(500).json({
+      message: "Проблема с созданием книги",
+      error: e.message,
+    });
+  }
+};
