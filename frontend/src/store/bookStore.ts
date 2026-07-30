@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import api from "../services/api";
+import type { iAuthor } from "./authorStore";
 
 interface iBook {
   id: string;
@@ -7,6 +8,8 @@ interface iBook {
   description: string;
   price: number;
   createdAt: Date;
+
+  author: iAuthor;
 }
 
 interface iBookStore {

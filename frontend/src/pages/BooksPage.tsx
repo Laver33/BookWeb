@@ -17,7 +17,7 @@ const BooksPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-4 gap-3 flex border border-amber-100">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-4 gap-3 lg:flex sm:grid border border-amber-100">
           <motion.button
             whileHover={{ scale: 1.02 }}
             className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300"
@@ -40,7 +40,7 @@ const BooksPage = () => {
         </section>
       ) : (
         <motion.section
-          className="w-9/12 grid grid-cols-4 gap-4"
+          className="w-9/12 grid xl:grid-cols-4 lg:grid-cols-3 lg:gap-4 md:grid-cols-2 md:gap-2 sm:grid-cols-1 sm:gap-2"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}

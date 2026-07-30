@@ -68,6 +68,12 @@ const BookPage = () => {
             <span className="font-bold">Приблезительная цена книги: </span>
             {currentBook.price}$
           </p>
+          <p>
+            <span className="font-bold">Автор поста: </span>
+            {currentBook.author
+              ? `${currentBook.author.name} ${currentBook.author.surname}`
+              : "Аноним"}
+          </p>
         </motion.div>
 
         {/* Кнопки взаимодействие */}

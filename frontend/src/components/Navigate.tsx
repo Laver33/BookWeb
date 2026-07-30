@@ -31,7 +31,7 @@ const Navigate = () => {
   ];
 
   return (
-    <nav className="bg-gray-900 text-white py-1.5 grid grid-cols-4 gap-1 w-3/10 mx-auto my-5 place-items-center rounded-3xl">
+    <nav className="bg-gray-900 text-white py-1.5 grid lg:grid-cols-4 sm:grid-cols-2 gap-1 w-3/10 mx-auto lg:my-5 sm:my-1 place-items-center rounded-3xl">
       <div
         onClick={toggleTheme}
         className="cursor-pointer bg-gray-800 py-1.5 px-3 rounded-2xl"

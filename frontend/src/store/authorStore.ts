@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import api from "../services/api";
 
-interface iAuthor {
+export interface iAuthor {
   id: string;
   email: string;
   name: string;

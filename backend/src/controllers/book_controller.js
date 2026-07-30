@@ -30,6 +30,10 @@ export const findBook = async (req, res) => {
 
     const book = await prisma.book.findUnique({
       where: { id },
+      include: {
+        author: true,
+        notes: true,
+      },
     });
 
     if (!book) {
