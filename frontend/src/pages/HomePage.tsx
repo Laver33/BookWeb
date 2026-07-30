@@ -1,20 +1,25 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import useFetchAllData from "../hooks/dataFetch";
+import useAuthorStore from "../store/authorStore";
+import useBookStore from "../store/bookStore";
 
 const HomePage = () => {
   useFetchAllData();
+
+  const { authors } = useAuthorStore();
+  const { books } = useBookStore();
 
   const projectStats = [
     {
       id: 1,
       title: "Пользователей на проекте",
-      value: "1",
+      value: authors.length,
     },
     {
       id: 2,
       title: "Книг на сайте",
-      value: "1",
+      value: books.length,
     },
   ];
 
