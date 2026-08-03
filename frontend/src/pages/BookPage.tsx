@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router";
 import useBookStore from "../store/bookStore";
 import { useEffect } from "react";
+import { FaEye, FaRegHeart } from "react-icons/fa";
 
 const BookPage = () => {
   const { id } = useParams();
@@ -22,7 +23,7 @@ const BookPage = () => {
     },
     {
       id: 2,
-      text: "Лайк",
+      text: "Понравилась книга",
     },
   ];
 
@@ -51,7 +52,7 @@ const BookPage = () => {
       <div className="flex p-12">
         {/* Описание и инофрмация */}
         <motion.div
-          className="w-8/12 gap-5 grid text-xl"
+          className="w-9/12 gap-5 grid text-xl"
           whileInView={{ opacity: [0, 1] }}
           transition={{ duration: 2.5 }}
         >
@@ -61,32 +62,47 @@ const BookPage = () => {
           </p>
 
           <p>
-            <span className="font-bold">Дата добавления:</span>{" "}
-            {date.toLocaleDateString()}
-          </p>
-          <p>
             <span className="font-bold">Приблезительная цена книги: </span>
             {currentBook.price}$
           </p>
+
+          <p>
+            <span className="font-bold">Дата добавления:</span>{" "}
+            {date.toLocaleDateString()}
+          </p>
+
           <p>
             <span className="font-bold">Автор поста: </span>
             {currentBook.author
               ? `${currentBook.author.name} ${currentBook.author.surname}`
               : "Аноним"}
           </p>
+
+          <div className="flex gap-5  text-lg">
+            <div className="flex items-center gap-2 text-gray-500">
+              <FaEye />
+              <p>null</p>
+            </div>
+
+            <div className="flex items-center gap-2 text-red-500">
+              <FaRegHeart />
+              <p>null</p>
+            </div>
+          </div>
         </motion.div>
 
         {/* Кнопки взаимодействие */}
         <motion.div
-          className="w-4/12 gap-4 grid justify-center"
+          className="w-3/12 gap-3 grid"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           {buttonsData.map((item) => (
             <motion.button
+              whileHover={{ scale: 1.02 }}
               key={item.id}
-              className="bg-amber-800 px-7 rounded-lg text-lg"
+              className="bg-amber-800 max-h-55 rounded-lg text-lg"
             >
               <p className="text-white font-medium">{item.text}</p>
             </motion.button>
@@ -95,7 +111,7 @@ const BookPage = () => {
       </div>
 
       {/* Список других книг */}
-      <div className="p-12 grid gap-5">
+      <section className="p-12 grid gap-5">
         <h2 className="text-xl font-bold">Список других книг</h2>
 
         {/* Список книг */}
@@ -109,9 +125,13 @@ const BookPage = () => {
               >
                 <p className="mb-2 font-semibold text-gray-900">{item.title}</p>
                 <p className="text-gray-700">
-                  Опис: {item.description.slice(0, 100)}
+                  <span className="text-black font-semibold">Описание: </span>
+                  {item.description.slice(0, 100)}
                 </p>
-                <p className="mt-2 font-medium text-amber-700">{item.price}$</p>
+                <p className="mt-2 font-medium text-amber-700">
+                  <span className="font-semibold text-black">Цена: </span>
+                  {item.price}$
+                </p>
                 <button
                   onClick={() => navigate(`/book/${item.id}`)}
                   className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-1.5 rounded-lg mt-3 w-full shadow-md transition-colors duration-300"
@@ -121,7 +141,7 @@ const BookPage = () => {
               </motion.div>
             ))}
         </div>
-      </div>
+      </section>
     </section>
   );
 };

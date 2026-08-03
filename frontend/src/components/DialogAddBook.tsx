@@ -11,6 +11,7 @@ import {
 } from "../components/ui/dialog.tsx";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
+import useBookStore from "@/store/bookStore.ts";
 
 const bookSchema = z.object({
   title: z
@@ -21,12 +22,13 @@ const bookSchema = z.object({
     .string()
     .min(20, { message: "Не меньше 20 символов" })
     .max(2000, { message: "Описание книги не должно привышать 2000 символов" }),
-  price: z.number().min(1, { message: "Минимальная цена — 1" }).nullable(),
+  price: z.number().min(1, { message: "Минимальная цена — 1" }),
 });
 
 type bookFormData = z.infer<typeof bookSchema>;
 
 const DialogAddBook = () => {
+  const { createBook } = useBookStore();
   const {
     register,
     handleSubmit,
@@ -40,8 +42,13 @@ const DialogAddBook = () => {
       price: undefined,
     },
   });
-  const onSubmit: SubmitHandler<bookFormData> = (data) => {
+  const onSubmit: SubmitHandler<bookFormData> = async (data) => {
     try {
+      await createBook({
+        title: data.title,
+        description: data.description,
+        price: data.price,
+      });
       console.log(data);
       toast("Книга добавленна");
     } catch (e) {

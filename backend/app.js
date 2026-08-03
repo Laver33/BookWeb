@@ -36,19 +36,19 @@ app.get("/auth/login", authController.loginAuthor);
 app.post("/book", bookController.createBook);
 app.get("/books", bookController.findBooks);
 app.get("/book/:id", bookController.findBook);
-app.delete("/book:id", bookController.deleteBook);
+app.delete("/book/:id", bookController.deleteBook);
 app.delete("/books", bookController.deleteAllBooks);
-app.put("/book:id", bookController.updateBook);
+app.put("/book/:id", bookController.updateBook);
 
 // Операции над авторами
 app.get("/authors", authorController.findAuthors);
-app.get("/author:id", authorController.findAuthor);
-app.delete("/author:id", authorController.deleteAuthor);
-app.put("/author:id", authorController.updateAuthor);
+app.get("/author/:id", authorController.findAuthor);
+app.delete("/author/:id", authorController.deleteAuthor);
+app.put("/author/:id", authorController.updateAuthor);
 
 // Операции над заметками
 // app.post("/note", noteController.createNote); // создать
 app.get("/notes", noteController.findNotes);
-app.get("/note:id", noteController.findNote);
-app.delete("/book:id", noteController.deleteNote);
-app.put("/author:id", noteController.updateNote);
+app.get("/note/:id", noteController.findNote);
+app.delete("/book/:id", noteController.deleteNote);
+app.put("/author/:id", noteController.updateNote);

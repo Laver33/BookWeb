@@ -54,9 +54,13 @@ const BooksPage = () => {
             >
               <p className="mb-2 font-semibold text-gray-900">{item.title}</p>
               <p className="text-gray-700">
-                Опис: {item.description.slice(0, 100)}
+                <span className="text-black font-semibold">Описание: </span>
+                {item.description.slice(0, 100)}
               </p>
-              <p className="mt-2 font-medium text-amber-700">{item.price}$</p>
+              <p className="mt-2 font-medium text-amber-700">
+                <span className="font-semibold text-black">Цена: </span>
+                {item.price}$
+              </p>
               <button
                 onClick={() => navigate(`/book/${item.id}`)}
                 className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-1.5 rounded-lg mt-3 w-full shadow-md transition-colors duration-300"

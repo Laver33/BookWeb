@@ -6,7 +6,7 @@ interface iBook {
   id: string;
   title: string;
   description: string;
-  price: number;
+  price: number | null;
   createdAt: Date;
 
   author: iAuthor;
@@ -19,7 +19,9 @@ interface iBookStore {
   fetchBooks: () => Promise<void>;
   fetchBook: (id: string) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
-  //   createAuthor: (author: any) => Promise<void>;
+  createBook: (
+    bookData: Omit<iBook, "id" | "createdAt" | "author">,
+  ) => Promise<iBook>;
 }
 
 const useBookStore = create<iBookStore>((set) => ({
@@ -58,6 +60,30 @@ const useBookStore = create<iBookStore>((set) => ({
       set({ loading: false });
     } catch (e) {
       console.log(e);
+    }
+  },
+
+  createBook: async (bookData) => {
+    set({ loading: true });
+
+    try {
+      const response = await api.post("/book", {
+        title: bookData.title,
+        description: bookData.description,
+        price: bookData.price ?? undefined,
+      });
+
+      const newBook = response.data.book || response.data;
+      set((state) => ({
+        books: [...state.books, newBook],
+        loading: false,
+      }));
+
+      return newBook;
+    } catch (e) {
+      console.error(e);
+      set({ loading: false });
+      throw e;
     }
   },
 }));

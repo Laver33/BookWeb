@@ -21,3 +21,8 @@ test("Test footer button", async ({ page }) => {
   await page.goto("http://localhost:5173/home");
   await page.getByRole("link", { name: "Начать сейчас" }).click();
 });
+
+test("Test top button", async ({ page }) => {
+  await page.goto("http://localhost:5173/home");
+  await page.getByRole("link", { name: "Топ авторов" }).click();
+});
