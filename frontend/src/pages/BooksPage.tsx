@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import useFetchAllData from "../hooks/dataFetch";
 import useBookStore from "../store/bookStore.ts";
+import DialogAddBook from "@/components/DialogAddBook.tsx";
 
 const BooksPage = () => {
   useFetchAllData();
@@ -18,13 +19,14 @@ const BooksPage = () => {
         transition={{ duration: 1 }}
       >
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-4 gap-3 lg:flex sm:grid border border-amber-100">
-          <motion.button
+          <motion.div
             whileHover={{ scale: 1.02 }}
             className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300"
           >
-            Добавить книгу
-          </motion.button>
+            <DialogAddBook />
+          </motion.div>
           <motion.button
+            onClick={() => navigate("/top")}
             whileHover={{ scale: 1.02 }}
             className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded-lg shadow-md transition-colors duration-300"
           >

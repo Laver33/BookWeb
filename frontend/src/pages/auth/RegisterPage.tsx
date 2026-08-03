@@ -4,11 +4,16 @@ import * as z from "zod";
 import { useNavigate } from "react-router";
 import AuthIcon from "../../components/AuthImage";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import useAuthorStore from "@/store/authorStore";
 
 const registerSchema = z
   .object({
     name: z.string().min(2, { message: "Минимальная длина 2 символа" }),
     surname: z.string().min(2, "Фамилия должна содержать минимум 2 символа"),
+    age: z
+      .number()
+      .min(6, { message: "Сайт предназначен для людей старше 6 лет" }),
     email: z.string().email("Неверный формат email"),
     password: z.string().min(6, "Пароль должен содержать минимум 6 символов"),
     confirmPassword: z.string().min(6, "Подтверждение пароля обязательно"),
@@ -21,6 +26,7 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const RegisterPage = () => {
+  const { createAuthor } = useAuthorStore();
   const navigate = useNavigate();
   const {
     register,
@@ -31,6 +37,7 @@ const RegisterPage = () => {
     defaultValues: {
       name: "",
       surname: "",
+      age: undefined,
       email: "",
       password: "",
       confirmPassword: "",
@@ -39,10 +46,18 @@ const RegisterPage = () => {
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     try {
-      console.log(data);
-      navigate("/home");
+      await createAuthor({
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        age: data.age,
+        password: data.password,
+      });
+      console.log("Пользователь создан");
+      toast("Войдите пожалуйста");
+      navigate("/");
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -83,6 +98,24 @@ const RegisterPage = () => {
               {errors.surname && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.surname.message}
+                </p>
+              )}
+            </div>
+
+            {/* Возраст */}
+            <div>
+              <input
+                type="number"
+                placeholder="Возраст"
+                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                {...register("age", {
+                  valueAsNumber: true,
+                  setValueAs: (v) => (v === "" ? undefined : Number(v)),
+                })}
+              />
+              {errors.surname && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.age?.message}
                 </p>
               )}
             </div>

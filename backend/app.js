@@ -7,6 +7,7 @@ import cors from "cors";
 import * as bookController from "./src/controllers/book_controller.js";
 import * as authorController from "./src/controllers/author_controller.js";
 import * as noteController from "./src/controllers/note_controller.js";
+import * as authController from "./src/controllers/auth_controller.js";
 
 const app = express();
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
@@ -27,6 +28,10 @@ app.listen(port, () => {
   console.log(`Бекенд стартанул: http://localhost:${port}`);
 });
 
+// Вход и регистрация
+app.post("/auth/register", authController.createAuthor);
+app.get("/auth/login", authController.loginAuthor);
+
 // Операции над книгами
 app.post("/book", bookController.createBook);
 app.get("/books", bookController.findBooks);
@@ -36,7 +41,6 @@ app.delete("/books", bookController.deleteAllBooks);
 app.put("/book:id", bookController.updateBook);
 
 // Операции над авторами
-app.post("/author", authorController.createAuthor);
 app.get("/authors", authorController.findAuthors);
 app.get("/author:id", authorController.findAuthor);
 app.delete("/author:id", authorController.deleteAuthor);

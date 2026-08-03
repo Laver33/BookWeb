@@ -4,9 +4,9 @@ import * as z from "zod";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import AuthIcon from "../../components/AuthImage";
+import { toast } from "react-toastify";
 
 const loginSchema = z.object({
-  name: z.string().min(2, { message: "Имя должно быть не менее 2 символов" }),
   email: z.string().email({ message: "Некорректный email" }),
   password: z
     .string()
@@ -24,7 +24,6 @@ const LoginPage = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
@@ -32,8 +31,11 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
     try {
       navigate("/home");
+      toast("Хорошего дня");
       console.log(data);
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -48,20 +50,6 @@ const LoginPage = () => {
         <div className="w-1/2 p-8">
           <form className="max-w-md mx-auto p-6 space-y-4">
             <h2 className="text-2xl font-bold flex justify-center">Вход</h2>
-
-            {/* Имя */}
-            <div>
-              <input
-                {...register("name")}
-                placeholder="Имя"
-                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
 
             {/* Почта */}
             <div>

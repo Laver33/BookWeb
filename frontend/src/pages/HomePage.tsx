@@ -74,9 +74,15 @@ const HomePage = () => {
           >
             <Link
               to="/books"
-              className="px-8 py-4 text-lg font-semibold text-white duration-500 transition-all bg-amber-700 rounded-lg shadow-lg hover:bg-amber-800 hover:shadow-xl hover:scale-105"
+              className="px-6 py-4 text-lg max-w-48 font-semibold text-white duration-500 transition-all bg-amber-700 rounded-lg shadow-lg hover:bg-amber-800 hover:shadow-xl hover:scale-105"
             >
               Начать читать
+            </Link>
+            <Link
+              to="/top"
+              className="px-6 py-4 text-lg max-w-48 font-semibold text-white duration-500 transition-all bg-amber-700 rounded-lg shadow-lg hover:bg-amber-800 hover:shadow-xl hover:scale-105"
+            >
+              Топ авторов
             </Link>
           </motion.div>
         </motion.div>

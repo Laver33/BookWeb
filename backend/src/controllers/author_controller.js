@@ -102,42 +102,5 @@ export const updateAuthor = async (req, res) => {
   }
 };
 
-export const createAuthor = async (req, res) => {
-  try {
-    const saltRounds = 10;
-    const { name, surname, email, password, age } = req.body;
-
-    if (!name || !surname || !email || !password) {
-      return res.status(400).json({
-        message: "Не все обязательные поля заполнены",
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const author = await prisma.author.create({
-      data: {
-        name,
-        surname,
-        email,
-        age,
-        hashedPassword,
-      },
-    });
-
-    // Скрываем пароль из ответа
-    const { hashedPassword: none, ...authorWithoutPassword } = author;
-    res.status(201).json({
-      message: "Аккаунт успешно создан",
-      author: authorWithoutPassword,
-    });
-  } catch (e) {
-    res.status(500).json({
-      message: "Аккаунт не создан",
-      error: e.message,
-    });
-  }
-};
-
 // const isMatch1 = await bcrypt.compare("mypassword123", hashedPassword);
 // console.log("Верный пароль совпал:", isMatch1);

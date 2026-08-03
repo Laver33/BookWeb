@@ -9,6 +9,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
 import Navigate from "./components/Navigate";
 import Footer from "./components/Footer";
+import TopAuthorsPage from "./pages/TopAuthors";
 
 function Layout() {
   return (
@@ -42,7 +43,7 @@ function AppContent() {
 
         {/* Защищенные маршруты*/}
         <Route element={<Layout />}>
-          {/* <Route path="/top" element={<TopPage />} /> */}
+          <Route path="/top" element={<TopAuthorsPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/book/:id" element={<BookPage />} />
