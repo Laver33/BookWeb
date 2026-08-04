@@ -76,17 +76,6 @@ export const deleteBook = async (req, res) => {
   }
 };
 
-export const deleteAllBooks = async (req, res) => {
-  try {
-    await prisma.book.deleteMany({});
-  } catch (e) {
-    res.status(500).json({
-      message: "Проблема с удалением всех книг",
-      error: e.message,
-    });
-  }
-};
-
 export const updateBook = async (req, res) => {
   try {
     const { id } = req.params;

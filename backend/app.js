@@ -43,7 +43,6 @@ app.post("/book", authMiddleware, addBookValidator, bookController.createBook);
 app.get("/books", bookController.findBooks);
 app.get("/book/:id", bookController.findBook);
 app.delete("/book/:id", bookController.deleteBook);
-app.delete("/books", bookController.deleteAllBooks);
 app.put("/book/:id", bookController.updateBook);
 
 // Операции над авторами

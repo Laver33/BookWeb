@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { IoPlanetOutline } from "react-icons/io5";
 import { IoMdPlanet } from "react-icons/io";
 import { useState } from "react";
+import useAuthorStore from "@/store/authorStore";
 
 const ThemeVariants = {
   Light: "light",
@@ -11,6 +12,7 @@ const ThemeVariants = {
 type ThemeType = (typeof ThemeVariants)[keyof typeof ThemeVariants];
 
 const Navigate = () => {
+  const { token, logout } = useAuthorStore();
   const [theme, setTheme] = useState<ThemeType>(ThemeVariants.Light);
 
   const toggleTheme = () => {
@@ -45,6 +47,7 @@ const Navigate = () => {
 
       {NAVIGATE.map((item) => (
         <Link
+          key={item.path}
           to={item.path}
           className="hover:bg-gray-200 hover:text-black duration-700 transition-colors px-5 py-1.5 rounded-3xl"
         >
@@ -52,12 +55,22 @@ const Navigate = () => {
         </Link>
       ))}
 
-      <Link
-        to="/"
-        className="hover:bg-gray-200 hover:text-black duration-700 transition-colors px-5 py-1.5 rounded-3xl"
-      >
-        Выйти
-      </Link>
+      {!token ? (
+        <Link
+          to="/"
+          className="hover:bg-gray-200 hover:text-black duration-700 transition-colors px-5 py-1.5 rounded-3xl"
+        >
+          Войти
+        </Link>
+      ) : (
+        <Link
+          onClick={logout}
+          to="/"
+          className="hover:bg-gray-200 hover:text-black duration-700 transition-colors px-5 py-1.5 rounded-3xl"
+        >
+          Выйти
+        </Link>
+      )}
     </nav>
   );
 };

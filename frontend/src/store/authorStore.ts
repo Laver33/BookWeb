@@ -29,6 +29,7 @@ interface iAuthorStore {
     loginData: iLoginAuthor,
   ) => Promise<{ token: string; user: iAuthor }>;
   checkAuth: () => boolean;
+  logout: () => void;
 }
 
 const useAuthorStore = create<iAuthorStore>((set, get) => ({
@@ -103,7 +104,6 @@ const useAuthorStore = create<iAuthorStore>((set, get) => ({
     try {
       const response = await api.post("/auth/login", loginData);
 
-      // ✅ Получаем токен и пользователя
       const { token, user } = response.data;
 
       localStorage.setItem("token", token);
@@ -125,6 +125,14 @@ const useAuthorStore = create<iAuthorStore>((set, get) => ({
   checkAuth: () => {
     const { token } = get();
     return !!token;
+  },
+
+  logout: () => {
+    localStorage.removeItem("token");
+    set({
+      token: null,
+      currentAuthor: null,
+    });
   },
 }));
 
