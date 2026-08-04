@@ -49,7 +49,6 @@ const DialogAddBook = () => {
         description: data.description,
         price: data.price,
       });
-      console.log(data);
       toast("Книга добавленна");
     } catch (e) {
       console.error("ошибка: " + e);

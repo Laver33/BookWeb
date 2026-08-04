@@ -3,6 +3,12 @@ import express from "express";
 import { prisma } from "./src/lib/prisma.js";
 import cors from "cors";
 
+// Валидаторы
+import { addBookValidator } from "./src/validations/bookValidate.js";
+import { addAuthorValidator } from "./src/validations/authorValidate.js";
+
+import { authMiddleware } from "./src/middleware/auth.js";
+
 // Контроллеры
 import * as bookController from "./src/controllers/book_controller.js";
 import * as authorController from "./src/controllers/author_controller.js";
@@ -30,10 +36,10 @@ app.listen(port, () => {
 
 // Вход и регистрация
 app.post("/auth/register", authController.createAuthor);
-app.get("/auth/login", authController.loginAuthor);
+app.post("/auth/login", authController.loginAuthor);
 
 // Операции над книгами
-app.post("/book", bookController.createBook);
+app.post("/book", authMiddleware, addBookValidator, bookController.createBook);
 app.get("/books", bookController.findBooks);
 app.get("/book/:id", bookController.findBook);
 app.delete("/book/:id", bookController.deleteBook);

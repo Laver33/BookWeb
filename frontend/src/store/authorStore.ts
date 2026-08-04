@@ -11,19 +11,30 @@ export interface iAuthor {
   password?: string;
 }
 
+interface iLoginAuthor {
+  email: string;
+  password: string;
+}
+
 interface iAuthorStore {
   authors: iAuthor[];
   currentAuthor: iAuthor | null;
+  token: string | null;
   loading: boolean;
   fetchAuthors: () => Promise<void>;
   fetchAuthor: (id: string) => Promise<void>;
   deleteAuthor: (id: string) => Promise<void>;
   createAuthor: (authorData: Omit<iAuthor, "id">) => Promise<iAuthor>;
+  loginAuthor: (
+    loginData: iLoginAuthor,
+  ) => Promise<{ token: string; user: iAuthor }>;
+  checkAuth: () => boolean;
 }
 
-const useAuthorStore = create<iAuthorStore>((set) => ({
+const useAuthorStore = create<iAuthorStore>((set, get) => ({
   authors: [],
   currentAuthor: null,
+  token: localStorage.getItem("token") || null,
   loading: false,
 
   fetchAuthors: async () => {
@@ -85,6 +96,35 @@ const useAuthorStore = create<iAuthorStore>((set) => ({
       set({ loading: false });
       throw e;
     }
+  },
+
+  loginAuthor: async (loginData) => {
+    set({ loading: true });
+    try {
+      const response = await api.post("/auth/login", loginData);
+
+      // ✅ Получаем токен и пользователя
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+
+      set({
+        token,
+        currentAuthor: user,
+        loading: false,
+      });
+
+      return { token, user };
+    } catch (e) {
+      console.error(e);
+      set({ loading: false });
+      throw e;
+    }
+  },
+
+  checkAuth: () => {
+    const { token } = get();
+    return !!token;
   },
 }));
 

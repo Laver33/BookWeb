@@ -2,9 +2,15 @@ import useFetchAllData from "@/hooks/dataFetch";
 import useAuthorStore from "@/store/authorStore";
 import { FaCrown } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const TopAuthorsPage = () => {
+  const { checkAuth } = useAuthorStore();
   useFetchAllData();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
   const { authors } = useAuthorStore();
   let top = 1;
 

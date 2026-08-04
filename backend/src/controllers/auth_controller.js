@@ -108,6 +108,7 @@ export const loginAuthor = async (req, res) => {
     res.status(200).json({
       message: "Вход выполнен успешно",
       token,
+      user,
     });
   } catch (e) {
     console.error("Ошибка входа:", e);

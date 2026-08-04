@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Author" ALTER COLUMN "age" DROP NOT NULL;

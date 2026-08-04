@@ -131,7 +131,8 @@ export const updateBook = async (req, res) => {
 
 export const createBook = async (req, res) => {
   try {
-    const { title, description, authorId, price } = req.body;
+    const { title, description, price } = req.body;
+    const authorId = req.user.id;
 
     if (!title || !description || !authorId) {
       return res.status(400).json({

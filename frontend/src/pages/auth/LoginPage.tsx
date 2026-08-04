@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import AuthIcon from "../../components/AuthImage";
 import { toast } from "react-toastify";
+import useAuthorStore from "@/store/authorStore";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Некорректный email" }),
@@ -16,6 +17,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
+  const { loginAuthor } = useAuthorStore();
   const navigate = useNavigate();
   const {
     register,
@@ -28,13 +30,18 @@ const LoginPage = () => {
       password: "",
     },
   });
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
+      await loginAuthor({
+        email: data.email,
+        password: data.password,
+      });
+
+      toast.success("Успешный вход");
       navigate("/home");
-      toast("Хорошего дня");
-      console.log(data);
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      toast.error(e.response?.data?.message || "Ошибка входа");
     }
   };
 
