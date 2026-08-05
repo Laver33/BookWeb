@@ -6,6 +6,9 @@ model Book {
   createdAt DateTime @default(now()) @map("created_at")
   authorId String 
 
+  likes Int @default(0)
+  views Int @default(0)
+
   author Author @relation(fields: [authorId], references: [id], onDelete: Cascade)
   notes Note[]
 }

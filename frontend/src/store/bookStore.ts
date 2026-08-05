@@ -9,6 +9,8 @@ interface iBook {
   price: number | null;
   createdAt: Date;
 
+  likes?: number;
+  views?: number;
   author: iAuthor;
 }
 
@@ -22,6 +24,7 @@ interface iBookStore {
   createBook: (
     bookData: Omit<iBook, "id" | "createdAt" | "author">,
   ) => Promise<iBook>;
+  putLikeBook: (id: string) => Promise<void>;
 }
 
 const useBookStore = create<iBookStore>((set) => ({
@@ -35,9 +38,24 @@ const useBookStore = create<iBookStore>((set) => ({
     try {
       const response = await api.get("/books");
       set({ books: response.data, loading: false });
-      console.log("start");
     } catch (e) {
+      set({ loading: false });
       console.log(e);
+    }
+  },
+
+  putLikeBook: async (id) => {
+    set({ loading: true });
+
+    try {
+      const response = await api.put(`/book/${id}/like`);
+      set((_state) => ({
+        currentBook: response.data.book || response.data,
+        loading: false,
+      }));
+    } catch (e) {
+      set({ loading: false });
+      console.error(e);
     }
   },
 
@@ -48,6 +66,7 @@ const useBookStore = create<iBookStore>((set) => ({
       const response = await api.get(`/book/${id}`);
       set({ currentBook: response.data, loading: false });
     } catch (e) {
+      set({ loading: false });
       console.log(e);
     }
   },
@@ -56,9 +75,10 @@ const useBookStore = create<iBookStore>((set) => ({
     set({ loading: true });
 
     try {
-      await api.delete(`/books/${id}`);
+      await api.delete(`/book/${id}`);
       set({ loading: false });
     } catch (e) {
+      set({ loading: false });
       console.log(e);
     }
   },

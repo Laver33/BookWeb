@@ -28,12 +28,23 @@ export const findBook = async (req, res) => {
       });
     }
 
-    const book = await prisma.book.findUnique({
-      where: { id },
-      include: {
-        author: true,
-        notes: true,
-      },
+    const book = await prisma.$transaction(async (tx) => {
+      // просмотры
+      await tx.book.update({
+        where: { id },
+        data: {
+          views: { increment: 1 },
+        },
+      });
+
+      // книга
+      return tx.book.findUnique({
+        where: { id },
+        include: {
+          author: true,
+          notes: true,
+        },
+      });
     });
 
     if (!book) {
@@ -46,6 +57,22 @@ export const findBook = async (req, res) => {
   } catch (e) {
     res.status(500).json({
       message: "Проблема с поиском книги",
+      error: e.message,
+    });
+  }
+};
+
+export const putLikeBook = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await prisma.book.update({
+      where: { id },
+      data: { likes: { increment: 1 } },
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "Проблема с лайком",
       error: e.message,
     });
   }

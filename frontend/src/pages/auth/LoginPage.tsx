@@ -46,9 +46,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-0 m-0 bg-gray-200">
+    <div className="flex items-center justify-center min-h-screen p-0 m-0 bg-gray-200 dark:bg-black">
       <motion.div
-        className="flex items-center justify-center bg-white rounded-lg shadow-2xl overflow-hidden max-w-4xl w-full"
+        className="flex items-center justify-center bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden max-w-4xl w-full"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -93,14 +93,14 @@ const LoginPage = () => {
                 whileHover={{ scaleY: 0.98, scaleX: 1.03 }}
                 onClick={handleSubmit(onSubmit)}
                 disabled={isSubmitting}
-                className="w-full bg-amber-700 font-medium hover:bg-amber-800 text-white py-3 px-2 rounded disabled:opacity-50 transition-colors"
+                className="w-full bg-amber-700 font-medium hover:bg-amber-800 dark:bg-amber-800  dark:hover:bg-amber-900 text-white py-3 px-2 rounded disabled:opacity-50 transition-colors"
               >
                 {isSubmitting ? "Загрузка..." : "Войти"}
               </motion.button>
 
               <motion.button
                 whileHover={{ scale: 1.02 }}
-                className="w-full bg-white text-gray-900 font-medium p-2 rounded  hover:text-gray-800 duration-1000 disabled:opacity-50 transition-colors"
+                className="w-full bg-white text-gray-900 font-medium p-2 rounded dark:bg-gray-800 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-800 duration-1000 disabled:opacity-50 transition-colors"
                 onClick={() => {
                   navigate("/register");
                 }}

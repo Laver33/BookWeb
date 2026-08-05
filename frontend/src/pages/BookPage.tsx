@@ -3,12 +3,14 @@ import { useNavigate, useParams } from "react-router";
 import useBookStore from "../store/bookStore";
 import { useEffect } from "react";
 import { FaEye, FaRegHeart } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const BookPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { books, currentBook, fetchBook, loading } = useBookStore();
+  const { books, currentBook, fetchBook, loading, putLikeBook } =
+    useBookStore();
 
   useEffect(() => {
     if (id) {
@@ -20,10 +22,16 @@ const BookPage = () => {
     {
       id: 1,
       text: "Добавить в избранное",
+      click: () => toast.error("Пока пусто"),
     },
     {
       id: 2,
       text: "Понравилась книга",
+      click: () => {
+        if (id) {
+          putLikeBook(id);
+        }
+      },
     },
   ];
 
@@ -39,7 +47,7 @@ const BookPage = () => {
 
   return (
     <section className="grid">
-      <div className="flex justify-center bg-gray-100 inset-shadow-sm py-28">
+      <div className="flex justify-center bg-gray-100 dark:bg-gray-900 inset-shadow-sm py-28">
         <motion.h2
           className="text-7xl font-bold"
           whileInView={{ scale: 1.5 }}
@@ -81,12 +89,12 @@ const BookPage = () => {
           <div className="flex gap-5  text-lg">
             <div className="flex items-center gap-2 text-gray-500">
               <FaEye />
-              <p>null</p>
+              <p>{currentBook.views}</p>
             </div>
 
             <div className="flex items-center gap-2 text-red-500">
               <FaRegHeart />
-              <p>null</p>
+              <p>{currentBook.likes}</p>
             </div>
           </div>
         </motion.div>
@@ -102,6 +110,7 @@ const BookPage = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               key={item.id}
+              onClick={item.click}
               className="bg-amber-800 max-h-55 rounded-lg text-lg"
             >
               <p className="text-white font-medium">{item.text}</p>
@@ -121,20 +130,26 @@ const BookPage = () => {
             .map((item) => (
               <motion.div
                 key={item.id}
-                className="bg-white/80 backdrop-blur-sm min-w-50 p-4 rounded-2xl shadow-xl border border-amber-100 hover:shadow-2xl transition-shadow duration-300"
+                className="bg-white/80 dark:bg-black dark:border-white backdrop-blur-sm min-w-50 p-4 rounded-2xl shadow-xl border border-amber-100 hover:shadow-2xl transition-shadow duration-300"
               >
-                <p className="mb-2 font-semibold text-gray-900">{item.title}</p>
-                <p className="text-gray-700">
-                  <span className="text-black font-semibold">Описание: </span>
+                <p className="mb-2 font-semibold text-gray-900 dark:text-white">
+                  {item.title}
+                </p>
+                <p className="text-gray-700 dark:text-gray-100">
+                  <span className="text-black font-semibold dark:text-white">
+                    Описание:{" "}
+                  </span>
                   {item.description.slice(0, 100)}
                 </p>
-                <p className="mt-2 font-medium text-amber-700">
-                  <span className="font-semibold text-black">Цена: </span>
+                <p className="mt-2 font-medium text-amber-700 dark:text-white">
+                  <span className="font-semibold text-black dark:text-white">
+                    Цена:{" "}
+                  </span>
                   {item.price}$
                 </p>
                 <button
                   onClick={() => navigate(`/book/${item.id}`)}
-                  className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-1.5 rounded-lg mt-3 w-full shadow-md transition-colors duration-300"
+                  className="bg-amber-700 hover:bg-amber-800 dark:bg-amber-800 dark:hover:bg-amber-900 text-white px-4 py-1.5 rounded-lg mt-3 w-full shadow-md transition-colors duration-300"
                 >
                   Перейти
                 </button>

@@ -179,14 +179,13 @@ const RegisterPage = () => {
                 whileHover={{ scale: 1.02 }}
                 type="button"
                 onClick={() => navigate("/")}
-                className="w-full bg-white text-gray-900 font-medium p-2 rounded  hover:text-gray-800 duration-1000 disabled:opacity-50 transition-colors"
+                className="w-full bg-white text-gray-900 font-medium p-2 rounded dark:bg-gray-800 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-800 duration-1000 disabled:opacity-50 transition-colors"
               >
                 Уже есть аккаунт? Войти
               </motion.button>
             </div>
           </form>
         </motion.div>
-
         {/* Изображение справа */}
         <AuthIcon />
       </motion.div>

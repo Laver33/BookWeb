@@ -44,6 +44,7 @@ app.get("/books", bookController.findBooks);
 app.get("/book/:id", bookController.findBook);
 app.delete("/book/:id", bookController.deleteBook);
 app.put("/book/:id", bookController.updateBook);
+app.put("/book/:id/like", authMiddleware, bookController.putLikeBook);
 
 // Операции над авторами
 app.get("/authors", authorController.findAuthors);
@@ -55,5 +56,5 @@ app.put("/author/:id", authorController.updateAuthor);
 // app.post("/note", noteController.createNote); // создать
 app.get("/notes", noteController.findNotes);
 app.get("/note/:id", noteController.findNote);
-app.delete("/book/:id", noteController.deleteNote);
-app.put("/author/:id", noteController.updateNote);
+app.delete("/note/:id", noteController.deleteNote);
+app.put("/note/:id", noteController.updateNote);

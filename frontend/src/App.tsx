@@ -1,5 +1,5 @@
+// App.tsx
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
-import "./index.css";
 import HomePage from "./pages/HomePage";
 import BooksPage from "./pages/BooksPage";
 import BookPage from "./pages/BookPage";
@@ -10,25 +10,32 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import Navigate from "./components/Navigate";
 import Footer from "./components/Footer";
 import TopAuthorsPage from "./pages/TopAuthors";
+import { useState } from "react";
+
+import "./index.css";
 
 function Layout() {
-  return (
-    <div>
-      {/* Навигационное меню */}
-      <div className="flex">
-        {/* <p>fffsfs</p> */}
-        <Navigate />
-      </div>
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
-      {/* Контент страницы */}
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      setTheme("light");
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
+
+  return (
+    <div className="bg-white dark:bg-gray-950 min-h-screen">
+      <Navigate theme={theme} toggleTheme={toggleTheme} />
       <div className="pb-16">
         <Outlet />
       </div>
-
-      {/* Подвал */}
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -37,11 +44,9 @@ function AppContent() {
   return (
     <main>
       <Routes>
-        {/* Публичные маршруты */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Защищенные маршруты*/}
         <Route element={<Layout />}>
           <Route path="/top" element={<TopAuthorsPage />} />
           <Route path="/home" element={<HomePage />} />

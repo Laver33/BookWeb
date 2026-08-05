@@ -2,6 +2,8 @@ import { test } from "@playwright/test";
 
 // Создание тест аккаунта
 test("Create test acc", async ({ page }) => {
+  let testEmail: number = Math.floor(Math.random() * 100000);
+
   await page.goto("http://localhost:5173/register");
   await page.getByRole("textbox", { name: "Имя" }).click();
   await page.getByRole("textbox", { name: "Имя" }).press("CapsLock");
@@ -16,7 +18,9 @@ test("Create test acc", async ({ page }) => {
   await page.getByRole("spinbutton", { name: "Возраст" }).click();
   await page.getByRole("spinbutton", { name: "Возраст" }).fill("66");
   await page.getByRole("textbox", { name: "Email" }).click();
-  await page.getByRole("textbox", { name: "Email" }).fill("testacc@gmail.com");
+  await page
+    .getByRole("textbox", { name: "Email" })
+    .fill(`test${testEmail}@gmail.com`);
   await page.getByRole("textbox", { name: "Пароль", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Пароль", exact: true })

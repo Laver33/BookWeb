@@ -6,7 +6,7 @@ const Footer = () => {
   const notify = () => toast("Начнем");
 
   return (
-    <section className="px-4 py-12 bg-amber-800">
+    <section className="px-4 py-12 bg-amber-800 dark:bg-amber-900">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -23,7 +23,7 @@ const Footer = () => {
         <Link
           to="/books"
           onClick={notify}
-          className="inline-block px-10 py-4 mt-8 text-lg font-semibold text-amber-800 transition-all duration-500 bg-white rounded-lg shadow-lg hover:bg-amber-50 hover:shadow-2xl hover:scale-105"
+          className="inline-block px-10 py-4 mt-8 text-lg font-semibold text-amber-800 dark:text-amber-900 transition-all duration-500 bg-white rounded-lg shadow-lg hover:bg-amber-50 hover:shadow-2xl hover:scale-105"
         >
           Начать сейчас
         </Link>

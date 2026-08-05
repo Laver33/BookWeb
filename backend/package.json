@@ -13,7 +13,6 @@
   "type": "module",
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.0",
-    "@prisma/client": "^7.9.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -22,10 +21,11 @@
     "jsonwebtoken": "^9.0.3",
     "nodemailer": "^9.0.3",
     "nodemon": "^3.1.14",
-    "pg": "^8.22.0",
-    "prisma": "^7.9.0"
+    "pg": "^8.22.0"
   },
   "devDependencies": {
+    "@prisma/client": "^7.9.1",
+    "prisma": "^7.9.1",
     "tsx": "^4.23.1"
   }
 }
