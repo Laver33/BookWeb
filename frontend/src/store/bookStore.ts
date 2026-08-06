@@ -46,16 +46,14 @@ const useBookStore = create<iBookStore>((set) => ({
 
   putLikeBook: async (id) => {
     set({ loading: true });
-
     try {
-      const response = await api.put(`/book/${id}/like`);
-      set((_state) => ({
-        currentBook: response.data.book || response.data,
-        loading: false,
-      }));
+      await api.put(`/book/${id}/like`);
+
+      set({ loading: false });
     } catch (e) {
       set({ loading: false });
       console.error(e);
+      throw e;
     }
   },
 

@@ -1,22 +1,39 @@
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router";
 import useBookStore from "../store/bookStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const BookPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const { books, currentBook, fetchBook, loading, putLikeBook } =
     useBookStore();
+
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     if (id) {
       fetchBook(id);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (currentBook) {
+      setLikes(currentBook.likes || 0);
+    }
+  }, [currentBook]);
+
+  const handleLike = () => {
+    if (!id) return;
+    setLikes(likes + 1);
+
+    putLikeBook(id).catch(() => {
+      setLikes(likes);
+      toast.error("Ошибка лайка");
+    });
+  };
 
   const buttonsData = [
     {
@@ -27,11 +44,7 @@ const BookPage = () => {
     {
       id: 2,
       text: "Понравилась книга",
-      click: () => {
-        if (id) {
-          putLikeBook(id);
-        }
-      },
+      click: handleLike,
     },
   ];
 
@@ -42,7 +55,6 @@ const BookPage = () => {
     return <div>Book not found</div>;
   }
 
-  // Для даты добавления
   const date = new Date(currentBook.createdAt);
 
   return (
@@ -58,7 +70,6 @@ const BookPage = () => {
       </div>
 
       <div className="flex p-12">
-        {/* Описание и инофрмация */}
         <motion.div
           className="w-9/12 gap-5 grid text-xl"
           whileInView={{ opacity: [0, 1] }}
@@ -70,7 +81,7 @@ const BookPage = () => {
           </p>
 
           <p>
-            <span className="font-bold">Приблезительная цена книги: </span>
+            <span className="font-bold">Приблизительная цена книги: </span>
             {currentBook.price}$
           </p>
 
@@ -86,20 +97,19 @@ const BookPage = () => {
               : "Аноним"}
           </p>
 
-          <div className="flex gap-5  text-lg">
+          <div className="flex gap-5 text-lg">
             <div className="flex items-center gap-2 text-gray-500">
               <FaEye />
-              <p>{currentBook.views}</p>
+              <p>{currentBook.views || 0}</p>
             </div>
 
             <div className="flex items-center gap-2 text-red-500">
               <FaRegHeart />
-              <p>{currentBook.likes}</p>
+              <p>{likes}</p> {/* ✅ Используем локальный state */}
             </div>
           </div>
         </motion.div>
 
-        {/* Кнопки взаимодействие */}
         <motion.div
           className="w-3/12 gap-3 grid"
           initial={{ opacity: 0, y: 30 }}
@@ -111,7 +121,7 @@ const BookPage = () => {
               whileHover={{ scale: 1.02 }}
               key={item.id}
               onClick={item.click}
-              className="bg-amber-800 max-h-55 rounded-lg text-lg"
+              className="bg-amber-800 max-h-55 rounded-lg text-lg py-3 px-4"
             >
               <p className="text-white font-medium">{item.text}</p>
             </motion.button>
@@ -119,11 +129,9 @@ const BookPage = () => {
         </motion.div>
       </div>
 
-      {/* Список других книг */}
       <section className="p-12 grid gap-5">
         <h2 className="text-xl font-bold">Список других книг</h2>
 
-        {/* Список книг */}
         <div className="flex gap-5 py-4 overflow-y-auto shrink-0">
           {books
             .filter((book) => book.id !== currentBook.id)

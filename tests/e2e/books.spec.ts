@@ -20,7 +20,8 @@ test("Test book to footer books", async ({ page }) => {
   await page.getByRole("button", { name: "Перейти" }).nth(2).click();
 });
 
-// Создание книги
+// Создание книги ( без входа)
 test("Test create book", async ({ page }) => {
   await page.goto("http://localhost:5173/books");
+  await page.getByRole("button", { name: "Добавить книгу" }).click();
 });

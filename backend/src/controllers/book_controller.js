@@ -66,9 +66,20 @@ export const putLikeBook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await prisma.book.update({
+    const book = await prisma.book.update({
       where: { id },
-      data: { likes: { increment: 1 } },
+      data: {
+        likes: { increment: 1 },
+      },
+      include: {
+        author: true,
+        notes: true,
+      },
+    });
+
+    res.status(200).json({
+      message: "Лайк успешно добавлен",
+      book,
     });
   } catch (e) {
     res.status(500).json({
