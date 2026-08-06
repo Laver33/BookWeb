@@ -41,3 +41,16 @@ test("login on test acc", async ({ page }) => {
   await page.getByRole("textbox", { name: "Пароль" }).fill("test1234test");
   await page.getByRole("button", { name: "Войти" }).click();
 });
+
+// От окна логина на главную
+test("login to home", async ({ page }) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Войти как гость" }).click();
+});
+
+// ОТ окна регистрации на главную
+test("register to home", async ({ page }) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Нету аккаунта" }).click();
+  await page.getByRole("button", { name: "Войти как гость" }).click();
+});
