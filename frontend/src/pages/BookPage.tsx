@@ -2,16 +2,29 @@ import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router";
 import useBookStore from "../store/bookStore";
 import { useEffect, useState } from "react";
-import { FaEye, FaRegHeart } from "react-icons/fa";
+import {
+  FaEye,
+  FaRegHeart,
+  FaLongArrowAltUp,
+  FaLongArrowAltDown,
+} from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const BookPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { books, currentBook, fetchBook, loading, putLikeBook } =
-    useBookStore();
+  const {
+    books,
+    currentBook,
+    fetchBook,
+    loading,
+    putLikeBook,
+    putRecommendBook,
+    putUnrecommendBook,
+  } = useBookStore();
 
   const [likes, setLikes] = useState(0);
+  const [recommendations, setRecommendations] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -22,6 +35,7 @@ const BookPage = () => {
   useEffect(() => {
     if (currentBook) {
       setLikes(currentBook.likes || 0);
+      setRecommendations(currentBook.recommendations || 0);
     }
   }, [currentBook]);
 
@@ -32,6 +46,28 @@ const BookPage = () => {
     putLikeBook(id).catch(() => {
       setLikes(likes);
       toast.error("Ошибка лайка");
+    });
+  };
+
+  const handleRecommend = () => {
+    if (!id) return;
+    setRecommendations(recommendations + 1);
+
+    toast("👍 Вы рекомендуете эту книгу");
+    putRecommendBook(id).catch(() => {
+      setRecommendations(recommendations);
+      toast.error("Ошибка рекомендации");
+    });
+  };
+
+  const handleUnrecommend = () => {
+    if (!id) return;
+    setRecommendations(recommendations - 1);
+
+    toast("👎 Вы не рекомендуете эту книгу");
+    putUnrecommendBook(id).catch(() => {
+      setRecommendations(recommendations);
+      toast.error("Ошибка рекомендации");
     });
   };
 
@@ -105,7 +141,23 @@ const BookPage = () => {
 
             <div className="flex items-center gap-2 text-red-500">
               <FaRegHeart />
-              <p>{likes}</p> {/* ✅ Используем локальный state */}
+              <p>{likes}</p>
+            </div>
+
+            <div className="flex items-center gap-2 rounded-sm text-lg border p-1">
+              <FaLongArrowAltUp
+                onClick={handleRecommend}
+                className="text-green-500"
+              />
+              {recommendations < 0 ? (
+                <p className="text-red-400">{recommendations}</p>
+              ) : (
+                <p className="text-green-400">{recommendations}</p>
+              )}
+              <FaLongArrowAltDown
+                onClick={handleUnrecommend}
+                className="text-red-500"
+              />
             </div>
           </div>
         </motion.div>

@@ -48,7 +48,6 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen ">
-      {/* Hero Section */}
       <section className="relative px-4 pt-16 pb-24 mx-auto max-w-7xl sm:pt-24 sm:pb-32">
         <motion.div
           initial={{ opacity: 0, y: 60 }}

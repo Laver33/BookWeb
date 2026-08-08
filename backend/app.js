@@ -45,6 +45,12 @@ app.get("/book/:id", bookController.findBook);
 app.delete("/book/:id", bookController.deleteBook);
 app.put("/book/:id", bookController.updateBook);
 app.put("/book/:id/like", authMiddleware, bookController.putLikeBook);
+app.put("/book/:id/recommend", authMiddleware, bookController.putRecommendBook);
+app.put(
+  "/book/:id/unrecommend",
+  authMiddleware,
+  bookController.putUnrecommendBook,
+);
 
 // Операции над авторами
 app.get("/authors", authorController.findAuthors);

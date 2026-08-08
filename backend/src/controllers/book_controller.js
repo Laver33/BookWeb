@@ -62,6 +62,60 @@ export const findBook = async (req, res) => {
   }
 };
 
+export const putRecommendBook = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const book = await prisma.book.update({
+      where: { id },
+      data: {
+        recommendations: { increment: 1 },
+      },
+      include: {
+        author: true,
+        notes: true,
+      },
+    });
+
+    res.status(200).json({
+      message: "Рекомендация успешно добавлена",
+      book,
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "Проблема с рекомендацией",
+      error: e.message,
+    });
+  }
+};
+
+export const putUnrecommendBook = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const book = await prisma.book.update({
+      where: { id },
+      data: {
+        recommendations: { decrement: 1 },
+      },
+      include: {
+        author: true,
+        notes: true,
+      },
+    });
+
+    res.status(200).json({
+      message: "Рекомендация успешно добавлена",
+      book,
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "Проблема с рекомендацией",
+      error: e.message,
+    });
+  }
+};
+
 export const putLikeBook = async (req, res) => {
   try {
     const { id } = req.params;

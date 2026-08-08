@@ -8,6 +8,7 @@ interface iBook {
   description: string;
   price: number | null;
   createdAt: Date;
+  recommendations: number;
 
   likes?: number;
   views?: number;
@@ -22,15 +23,40 @@ interface iBookStore {
   fetchBook: (id: string) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
   createBook: (
-    bookData: Omit<iBook, "id" | "createdAt" | "author">,
+    bookData: Omit<iBook, "id" | "createdAt" | "author" | "recommendations">,
   ) => Promise<iBook>;
   putLikeBook: (id: string) => Promise<void>;
+
+  putRecommendBook: (id: string) => Promise<void>;
+  putUnrecommendBook: (id: string) => Promise<void>;
 }
 
 const useBookStore = create<iBookStore>((set) => ({
   books: [],
   currentBook: null,
   loading: false,
+
+  putRecommendBook: async (id) => {
+    set({ loading: true });
+    try {
+      await api.put(`/book/${id}/recommend`);
+      set({ loading: false });
+    } catch (e) {
+      set({ loading: false });
+      console.error(e);
+    }
+  },
+
+  putUnrecommendBook: async (id) => {
+    set({ loading: true });
+    try {
+      await api.put(`/book/${id}/unrecommend`);
+      set({ loading: false });
+    } catch (e) {
+      set({ loading: false });
+      console.error(e);
+    }
+  },
 
   fetchBooks: async () => {
     set({ loading: true });

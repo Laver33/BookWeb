@@ -5,6 +5,7 @@ model Book {
   price Float @default(0)
   createdAt DateTime @default(now()) @map("created_at")
   authorId String 
+  recommendations Int  @default(0)
 
   likes Int @default(0)
   views Int @default(0)
