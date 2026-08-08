@@ -13,7 +13,23 @@ export const findAuthors = async (req, res) => {
       });
     }
 
-    res.json(authors);
+    const authorsWithStats = authors.map((author) => ({
+      ...author,
+      totalLikes: author.books.reduce(
+        (sum, book) => sum + (book.likes || 0),
+        0,
+      ),
+      totalViews: author.books.reduce(
+        (sum, book) => sum + (book.views || 0),
+        0,
+      ),
+      totalRecommendations: author.books.reduce(
+        (sum, book) => sum + (book.recommendations || 0),
+        0,
+      ),
+    }));
+
+    res.json(authorsWithStats);
   } catch (e) {
     res.status(500).json({
       message: "Авторы не найдены",
@@ -36,8 +52,23 @@ export const findAuthor = async (req, res) => {
         message: "Автор не найден",
       });
     }
+    const authorStats = authors.map((author) => ({
+      ...author,
+      totalLikes: author.books.reduce(
+        (sum, book) => sum + (book.likes || 0),
+        0,
+      ),
+      totalViews: author.books.reduce(
+        (sum, book) => sum + (book.views || 0),
+        0,
+      ),
+      totalRecommendations: author.books.reduce(
+        (sum, book) => sum + (book.recommendations || 0),
+        0,
+      ),
+    }));
 
-    res.json(author);
+    res.json(authorStats);
   } catch (e) {
     res.status(500).json({
       message: "Автор не найден",
@@ -101,6 +132,3 @@ export const updateAuthor = async (req, res) => {
     });
   }
 };
-
-// const isMatch1 = await bcrypt.compare("mypassword123", hashedPassword);
-// console.log("Верный пароль совпал:", isMatch1);

@@ -18,9 +18,9 @@ const AuthImage = () => {
         whileHover={{ scale: 1.03 }}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="mr-6 py-2 px-4 border cursor-pointer mt-3 border-black rounded-sm flex justify-center items-center gap-3"
+        className="mr-6 py-2 px-4 cursor-pointer bg-amber-700 mt-3 text-white rounded-sm flex justify-center items-center gap-3"
       >
-        <FaArrowLeft />
+        <FaArrowLeft className="text-sm" />
         <p>Войти как гость</p>
       </motion.button>
       <img

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Author" ADD COLUMN     "totalLikes" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalRecommendations" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalViews" INTEGER NOT NULL DEFAULT 0;

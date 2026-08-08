@@ -2,7 +2,7 @@ import { create } from "zustand";
 import api from "../services/api";
 import type { iAuthor } from "./authorStore";
 
-interface iBook {
+export interface iBook {
   id: string;
   title: string;
   description: string;

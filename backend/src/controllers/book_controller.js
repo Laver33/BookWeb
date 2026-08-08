@@ -66,15 +66,31 @@ export const putRecommendBook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const book = await prisma.book.update({
-      where: { id },
-      data: {
-        recommendations: { increment: 1 },
-      },
-      include: {
-        author: true,
-        notes: true,
-      },
+    const book = await prisma.$transaction(async (tx) => {
+      const existingBook = await tx.book.findUnique({
+        where: { id },
+        select: { authorId: true },
+      });
+
+      if (!existingBook) {
+        throw new Error("Книга не найдена");
+      }
+
+      tx.author.update({
+        where: { id: existingBook.authorId },
+        data: { totalRecommendations: { increment: 1 } },
+      });
+
+      return await tx.book.update({
+        where: { id },
+        data: {
+          recommendations: { increment: 1 },
+        },
+        include: {
+          author: true,
+          notes: true,
+        },
+      });
     });
 
     res.status(200).json({
@@ -93,15 +109,31 @@ export const putUnrecommendBook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const book = await prisma.book.update({
-      where: { id },
-      data: {
-        recommendations: { decrement: 1 },
-      },
-      include: {
-        author: true,
-        notes: true,
-      },
+    const book = await prisma.book.$transaction(async (tx) => {
+      const existingBook = await tx.book.findUnique({
+        where: { id },
+        select: { authorId: true },
+      });
+
+      if (!existingBook) {
+        throw new Error("Книга не найдена");
+      }
+
+      tx.author.update({
+        where: { id: existingBook.authorId },
+        data: { totalRecommendations: { decrement: 1 } },
+      });
+
+      return await tx.book.update({
+        where: { id },
+        data: {
+          recommendations: { decrement: 1 },
+        },
+        include: {
+          author: true,
+          notes: true,
+        },
+      });
     });
 
     res.status(200).json({
@@ -120,15 +152,31 @@ export const putLikeBook = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const book = await prisma.book.update({
-      where: { id },
-      data: {
-        likes: { increment: 1 },
-      },
-      include: {
-        author: true,
-        notes: true,
-      },
+    const book = await prisma.$transaction(async (tx) => {
+      const existingBook = await tx.book.findUnique({
+        where: { id },
+        select: { authorId: true },
+      });
+
+      if (!existingBook) {
+        throw new Error("Книга не найдена");
+      }
+
+      await tx.author.update({
+        where: { id: existingBook.authorId },
+        data: { totalLikes: { increment: 1 } },
+      });
+
+      return await tx.book.update({
+        where: { id },
+        data: {
+          likes: { increment: 1 },
+        },
+        include: {
+          author: true,
+          notes: true,
+        },
+      });
     });
 
     res.status(200).json({

@@ -14,6 +14,18 @@ const TopAuthorsPage = () => {
   const { authors } = useAuthorStore();
   let top = 1;
 
+  const statTitles: string[] = [
+    "Место",
+    "Имя",
+    "Фамилия",
+    "Возраст",
+    "Книг",
+    "Лайков",
+    "Поднятий",
+    "Просмотров",
+    "Статус",
+  ];
+
   return (
     <>
       <motion.header
@@ -27,7 +39,17 @@ const TopAuthorsPage = () => {
         <FaCrown className="text-5xl text-yellow-400" />
       </motion.header>
 
-      <section className="flex flex-1 w-full justify-center py-12 rounded-2xl">
+      <section className="flex flex-col w-full  items-center py-12 rounded-2xl">
+        {/* Наименование статистики */}
+        <motion.div className="items-center p-6 border flex gap-4 bg-white/80 backdrop-blur-sm rounded-lg mb-4 shadow-sm w-9/12 h-12 border-amber-100">
+          {statTitles.map((item) => (
+            <motion.div className="w-2/12 flex justify-center">
+              {item}
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Сама статистика */}
         <motion.div
           className="items-center overflow-auto p-6 border flex flex-col gap-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl w-9/12 h-125 border-amber-100"
           initial={{ opacity: 0, y: 30 }}
@@ -37,7 +59,7 @@ const TopAuthorsPage = () => {
           {authors.map((item) => (
             <motion.div
               key={item.id}
-              className="text-gray-800 w-full flex items-center p-4 rounded-xl gap-5 bg-white shadow-md border border-amber-100 hover:shadow-xl hover:border-amber-300 transition-all duration-300 "
+              className="text-gray-800 w-full text-sm flex items-center p-4 rounded-xl gap-5 bg-white shadow-md border border-amber-100 hover:shadow-xl hover:border-amber-300 transition-all duration-300 "
               whileHover={{ scale: 1.01 }}
             >
               <p className="flex gap-3 w-2/12">
@@ -46,7 +68,15 @@ const TopAuthorsPage = () => {
               <p className="w-2/12 font-semibold text-amber-700">{item.name}</p>
               <p className="w-2/12 font-medium text-gray-700">{item.surname}</p>
               <p className="w-2/12 text-gray-600">{item.age} лет</p>
-              <div className="w-6/12 flex justify-end">
+              <p className="w-2/12 text-gray-600">{item.books.length} книг</p>
+              <p className="w-2/12 text-gray-600">{item.totalLikes} Лайков</p>
+              <p className="w-2/12 text-gray-600">
+                {item.totalRecommendations} Поднятий
+              </p>
+              <p className="w-2/12 text-gray-600">
+                {item.totalViews} Просмотры
+              </p>
+              <div className="flex justify-end">
                 <span className="text-sm text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
                   Автор
                 </span>

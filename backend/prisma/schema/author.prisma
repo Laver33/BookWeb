@@ -6,6 +6,11 @@ model Author {
   description String?
   age Int?
 
+  // Для топов и статистики
+  totalViews     Int @default(0)
+  totalLikes     Int @default(0)
+  totalRecommendations Int @default(0)
+
   hashedPassword String @map("hashed_password")
   isActivated    Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
