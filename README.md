@@ -36,7 +36,7 @@ Fullstack веб-приложение для управления книгами
 
 cd backend
 npm install
-# Настрой .env (DATABASE_URL, JWT_SECRET и т.д.)
+Настройки .env (DATABASE_URL, JWT_SECRET и т.д.)
 npx prisma migrate dev
 npm run dev
 
@@ -44,13 +44,6 @@ npm run dev
 Bashcd frontend
 npm install
 npm run dev
-
-
-### 📁 Структура
-textBookWeb/
-├── backend/          # Express + Prisma
-├── frontend/         # React + Vite
-└── tests/            # Тесты
 
 
 Проект в разработке. Основные CRUD-операции и система рекомендаций уже реализованы. 
