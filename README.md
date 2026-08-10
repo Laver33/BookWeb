@@ -23,6 +23,11 @@ Fullstack веб-приложение для управления книгами
 - React Router
 - Framer Motion (Motion)
 
+### Tests
+- TypeScript
+- Playwright
+- Faker
+
 ## ✨ Функционал
 
 - Регистрация и авторизация (JWT)
