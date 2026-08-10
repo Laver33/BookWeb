@@ -11,8 +11,8 @@ export interface iBook {
   createdAt: Date;
   recommendations: number;
 
-  likes?: number;
-  views?: number;
+  likes: number;
+  views: number;
   author: iAuthor;
   notes?: iNote[];
 }

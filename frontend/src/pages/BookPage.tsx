@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import useBookStore from "../store/bookStore";
 import { useEffect, useState } from "react";
 import {
@@ -13,10 +13,10 @@ import DialogAddNote from "@/components/DialogAddNote";
 import useNoteStore from "@/store/noteStore";
 import DeleteBookButton from "@/components/DeleteBookButton";
 import useAuthorStore from "@/store/authorStore";
+import BookButton from "@/components/BookButton";
 
 const BookPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { currentAuthor } = useAuthorStore();
   const { fetchNotesByBook, bookNotes } = useNoteStore();
   const {
@@ -246,12 +246,7 @@ const BookPage = () => {
                   </span>
                   {item.price}$
                 </p>
-                <button
-                  onClick={() => navigate(`/book/${item.id}`)}
-                  className="bg-amber-700 hover:bg-amber-800 dark:bg-amber-800 dark:hover:bg-amber-900 text-white px-4 py-1.5 rounded-lg mt-3 w-full shadow-md transition-colors duration-300"
-                >
-                  Перейти
-                </button>
+                <BookButton item={item} />
               </motion.div>
             ))}
         </div>

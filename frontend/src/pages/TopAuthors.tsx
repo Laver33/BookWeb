@@ -2,7 +2,7 @@ import useFetchAllData from "@/hooks/dataFetch";
 import useAuthorStore from "@/store/authorStore";
 import { FaCrown } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 const TopAuthorsPage = () => {
   const { checkAuth } = useAuthorStore();
@@ -26,22 +26,52 @@ const TopAuthorsPage = () => {
     "Статус",
   ];
 
+  const websiteStats = useMemo(
+    () => [
+      { id: 1, title: "Количество авторов", value: authors.length },
+      {
+        id: 2,
+        title: "Количество книг",
+        value: authors.reduce((acc, curr) => acc + curr.books.length, 0),
+      },
+      {
+        id: 3,
+        title: "Количество лайков",
+        value: authors.reduce((acc, curr) => acc + curr.totalLikes, 0),
+      },
+      {
+        id: 4,
+        title: "Количество поднятий",
+        value: authors.reduce(
+          (acc, curr) => acc + curr.totalRecommendations,
+          0,
+        ),
+      },
+      {
+        id: 5,
+        title: "Количество просмотров",
+        value: authors.reduce((acc, curr) => acc + curr.totalViews, 0),
+      },
+    ],
+    [authors],
+  );
+
   return (
     <>
       <motion.header
-        className="flex gap-10 py-36 justify-center"
-        initial={{ opacity: 0, y: 10 }}
+        className="flex gap-10 py-36 justify-center items-center"
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <FaCrown className="text-5xl text-yellow-400" />
-        <h1 className="font-medium text-6xl">Топ пользователей</h1>
+        <h1 className="font-semibold text-6xl">Топ пользователей</h1>
         <FaCrown className="text-5xl text-yellow-400" />
       </motion.header>
 
       <section className="flex flex-col w-full  items-center py-12 rounded-2xl">
         {/* Наименование статистики */}
-        <motion.div className="items-center p-6 border flex gap-4 bg-white/80 backdrop-blur-sm rounded-lg mb-4 shadow-sm w-9/12 h-12 border-amber-100">
+        <motion.div className="items-center p-6 border flex gap-4 bg-white/80 dark:bg-black backdrop-blur-sm rounded-lg mb-4 shadow-sm w-9/12 h-12 border-amber-100">
           {statTitles.map((item) => (
             <motion.div className="w-2/12 flex justify-center">
               {item}
@@ -51,7 +81,7 @@ const TopAuthorsPage = () => {
 
         {/* Сама статистика */}
         <motion.div
-          className="items-center overflow-auto p-6 border flex flex-col gap-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl w-9/12 h-125 border-amber-100"
+          className="items-center overflow-auto p-6 border dark:bg-black flex flex-col gap-4 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl w-9/12 h-125 border-amber-100"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2 }}
@@ -85,6 +115,41 @@ const TopAuthorsPage = () => {
           ))}
         </motion.div>
       </section>
+
+      <section>
+        <motion.h2
+          className="font-bold lg:text-6xl sm:text-4xl  flex items-center justify-center lg:h-100 sm:h-70"
+          whileInView={{ scale: 1 }}
+          initial={{ scale: 0.8 }}
+          transition={{ duration: 0.8 }}
+        >
+          Хотите увидеть статистику сайта?
+        </motion.h2>
+      </section>
+
+      <motion.section
+        className="flex justify-center w-full mb-12"
+        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 10 }}
+        transition={{ duration: 1.2 }}
+      >
+        <div className="grid grid-cols-3 gap-5 w-9/12">
+          {websiteStats.map((item) => (
+            <motion.div
+              key={item.id}
+              className="border cursor-default px-4 py-3 rounded-lg h-30 hover:shadow-xl hover:border-amber-300 dark:border-amber-900 transition-all duration-300 flex flex-col justify-center items-center"
+              whileHover={{ scale: 1.01 }}
+            >
+              <p className="text-lg font-semibold text-amber-700 text-center">
+                {item.title}
+              </p>
+              <p className="text-2xl text-gray-600 text-center dark:text-gray-300">
+                {item.value}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
     </>
   );
 };
