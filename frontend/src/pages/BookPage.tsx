@@ -9,10 +9,13 @@ import {
   FaLongArrowAltDown,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
+import DialogAddNote from "@/components/DialogAddNote";
+import useNoteStore from "@/store/noteStore";
 
 const BookPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { fetchNotesByBook, bookNotes } = useNoteStore();
   const {
     books,
     currentBook,
@@ -29,6 +32,7 @@ const BookPage = () => {
   useEffect(() => {
     if (id) {
       fetchBook(id);
+      fetchNotesByBook(id);
     }
   }, [id]);
 
@@ -173,13 +177,36 @@ const BookPage = () => {
               whileHover={{ scale: 1.02 }}
               key={item.id}
               onClick={item.click}
-              className="bg-amber-800 max-h-55 rounded-lg text-lg py-3 px-4"
+              className="bg-amber-800 max-h-40 rounded-lg text-lg py-3 px-4"
             >
               <p className="text-white font-medium">{item.text}</p>
             </motion.button>
           ))}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            className="bg-amber-800 max-h-40 rounded-lg text-lg py-3 px-4"
+          >
+            <DialogAddNote />
+          </motion.button>
         </motion.div>
       </div>
+
+      <section className="p-12 grid gap-5">
+        <h2 className="text-xl font-bold">Заметки книги</h2>
+
+        {bookNotes.length === 0 ? (
+          <p className="text-gray-500">Нет заметок</p>
+        ) : (
+          bookNotes.map((note) => (
+            <div key={note.id} className="border p-4 mb-2 rounded">
+              <p>{note.content}</p>
+              <small className="text-gray-500">
+                {new Date(note.createdAt).toLocaleDateString()}
+              </small>
+            </div>
+          ))
+        )}
+      </section>
 
       <section className="p-12 grid gap-5">
         <h2 className="text-xl font-bold">Список других книг</h2>

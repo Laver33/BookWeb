@@ -3,7 +3,14 @@ import { prisma } from "../lib/prisma.js";
 export const findNotes = async (req, res) => {
   try {
     const notes = await prisma.note.findMany({
-      include: { book: true },
+      include: {
+        book: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
     });
 
     if (notes.length === 0) {
@@ -106,6 +113,76 @@ export const updateNote = async (req, res) => {
   } catch (e) {
     res.status(500).json({
       message: "Заметка не обновлена",
+      error: e.message,
+    });
+  }
+};
+
+export const createNote = async (req, res) => {
+  try {
+    const { content } = req.body;
+    const { bookId } = req.params;
+
+    if (!content) {
+      return res.status(400).json({
+        message: "Поле пустое",
+      });
+    }
+
+    const noteExists = await prisma.book.findUnique({
+      where: { id: bookId },
+    });
+    if (!noteExists) {
+      return res.status(404).json({
+        message: "Книга с таким ID не найдена",
+      });
+    }
+
+    const note = await prisma.note.create({
+      data: {
+        content,
+        bookId,
+      },
+    });
+
+    res.status(201).json(note);
+  } catch (e) {
+    res.status(500).json({
+      message: "Проблема с созданием заметки",
+      error: e.message,
+    });
+  }
+};
+
+export const getNotesByBook = async (req, res) => {
+  try {
+    const { bookId } = req.params;
+
+    const book = await prisma.book.findUnique({
+      where: { id: bookId },
+    });
+
+    if (!book) {
+      return res.status(404).json({
+        message: "Книга не найдена",
+      });
+    }
+
+    const notes = await prisma.note.findMany({
+      where: { bookId },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.json({
+      bookId,
+      total: notes.length,
+      notes,
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "Ошибка получения заметок",
       error: e.message,
     });
   }

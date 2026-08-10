@@ -6,6 +6,7 @@ import cors from "cors";
 // Валидаторы
 import { addBookValidator } from "./src/validations/bookValidate.js";
 import { addAuthorValidator } from "./src/validations/authorValidate.js";
+import { addNoteValidator } from "./src/validations/noteValidate.js";
 
 import { authMiddleware } from "./src/middleware/auth.js";
 
@@ -59,7 +60,8 @@ app.delete("/author/:id", authorController.deleteAuthor);
 app.put("/author/:id", authorController.updateAuthor);
 
 // Операции над заметками
-// app.post("/note", noteController.createNote); // создать
+app.get("/book/:bookId/notes", noteController.getNotesByBook);
+app.post("/note/:bookId", addNoteValidator, noteController.createNote);
 app.get("/notes", noteController.findNotes);
 app.get("/note/:id", noteController.findNote);
 app.delete("/note/:id", noteController.deleteNote);

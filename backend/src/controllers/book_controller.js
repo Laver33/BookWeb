@@ -42,7 +42,11 @@ export const findBook = async (req, res) => {
         where: { id },
         include: {
           author: true,
-          notes: true,
+          notes: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
         },
       });
     });

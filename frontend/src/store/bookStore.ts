@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import api from "../services/api";
 import type { iAuthor } from "./authorStore";
+import type { iNote } from "./noteStore";
 
 export interface iBook {
   id: string;
@@ -13,6 +14,7 @@ export interface iBook {
   likes?: number;
   views?: number;
   author: iAuthor;
+  notes?: iNote[];
 }
 
 interface iBookStore {
