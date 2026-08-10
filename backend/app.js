@@ -43,7 +43,7 @@ app.post("/auth/login", authController.loginAuthor);
 app.post("/book", authMiddleware, addBookValidator, bookController.createBook);
 app.get("/books", bookController.findBooks);
 app.get("/book/:id", bookController.findBook);
-app.delete("/book/:id", bookController.deleteBook);
+app.delete("/book/:id", authMiddleware, bookController.deleteBook);
 app.put("/book/:id", bookController.updateBook);
 app.put("/book/:id/like", authMiddleware, bookController.putLikeBook);
 app.put("/book/:id/recommend", authMiddleware, bookController.putRecommendBook);

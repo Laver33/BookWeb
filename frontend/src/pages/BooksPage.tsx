@@ -61,7 +61,7 @@ const BooksPage = () => {
               <p className="mb-2 font-semibold text-gray-900 dark:text-white">
                 {item.title}
               </p>
-              <p className="text-gray-700 dark:text-gray-100">
+              <p className="text-gray-700 dark:text-gray-100 break-all">
                 <span className="text-black font-semibold dark:text-white">
                   Описание:{" "}
                 </span>

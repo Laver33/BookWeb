@@ -11,10 +11,13 @@ import {
 import { toast } from "react-toastify";
 import DialogAddNote from "@/components/DialogAddNote";
 import useNoteStore from "@/store/noteStore";
+import DeleteBookButton from "@/components/DeleteBookButton";
+import useAuthorStore from "@/store/authorStore";
 
 const BookPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { currentAuthor } = useAuthorStore();
   const { fetchNotesByBook, bookNotes } = useNoteStore();
   const {
     books,
@@ -99,14 +102,23 @@ const BookPage = () => {
 
   return (
     <section className="grid">
-      <div className="flex justify-center bg-gray-100 dark:bg-gray-900 inset-shadow-sm py-28">
-        <motion.h2
-          className="text-7xl font-bold"
-          whileInView={{ scale: 1.5 }}
-          transition={{ duration: 0.5 }}
-        >
-          {currentBook.title}
-        </motion.h2>
+      <div className="relative bg-gray-100 dark:bg-gray-900 inset-shadow-sm py-28 px-12">
+        {/* Контейнер для кнопки */}
+
+        {currentAuthor?.id == currentBook.author.id ? (
+          <DeleteBookButton />
+        ) : null}
+
+        {/* Заголовок по центру */}
+        <div className="flex justify-center">
+          <motion.h2
+            className="text-7xl font-bold"
+            whileInView={{ scale: 1.5 }}
+            transition={{ duration: 0.5 }}
+          >
+            {currentBook.title}
+          </motion.h2>
+        </div>
       </div>
 
       <div className="flex p-12">
