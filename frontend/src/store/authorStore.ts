@@ -37,6 +37,7 @@ interface iAuthorStore {
   ) => Promise<{ token: string; user: iAuthor }>;
   checkAuth: () => boolean;
   logout: () => void;
+  getMe: () => Promise<void>;
 }
 
 const useAuthorStore = create<iAuthorStore>((set, get) => ({
@@ -44,6 +45,17 @@ const useAuthorStore = create<iAuthorStore>((set, get) => ({
   currentAuthor: null,
   token: localStorage.getItem("token") || null,
   loading: false,
+
+  getMe: async () => {
+    set({ loading: true });
+    try {
+      const response = await api.get("/me");
+      set({ currentAuthor: response.data, loading: false });
+    } catch (e) {
+      console.error(e);
+      set({ loading: false });
+    }
+  },
 
   fetchAuthors: async () => {
     set({ loading: true });

@@ -13,6 +13,7 @@ import TopAuthorsPage from "./pages/TopAuthors";
 import { useState } from "react";
 
 import "./index.css";
+import CurrentAuthorPage from "./pages/CurrentAuthorPage";
 
 function Layout() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -48,6 +49,7 @@ function AppContent() {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route element={<Layout />}>
+          <Route path="/me" element={<CurrentAuthorPage />} />
           <Route path="/top" element={<TopAuthorsPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/books" element={<BooksPage />} />

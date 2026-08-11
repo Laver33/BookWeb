@@ -29,15 +29,25 @@ export const findBook = async (req, res) => {
     }
 
     const book = await prisma.$transaction(async (tx) => {
-      // просмотры
-      await tx.book.update({
+      const existingBook = await tx.book.findUnique({
         where: { id },
-        data: {
-          views: { increment: 1 },
-        },
+        select: { authorId: true },
       });
 
-      // книга
+      if (!existingBook) {
+        throw new Error("Книга не найдена");
+      }
+
+      await tx.book.update({
+        where: { id },
+        data: { views: { increment: 1 } },
+      });
+
+      await tx.author.update({
+        where: { id: existingBook.authorId },
+        data: { totalViews: { increment: 1 } },
+      });
+
       return tx.book.findUnique({
         where: { id },
         include: {
@@ -59,6 +69,7 @@ export const findBook = async (req, res) => {
 
     res.status(200).json(book);
   } catch (e) {
+    console.error("Ошибка получения книги:", e);
     res.status(500).json({
       message: "Проблема с поиском книги",
       error: e.message,

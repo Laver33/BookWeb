@@ -38,6 +38,7 @@ app.listen(port, () => {
 // Вход и регистрация
 app.post("/auth/register", authController.createAuthor);
 app.post("/auth/login", authController.loginAuthor);
+app.get("/me", authMiddleware, authController.getMe);
 
 // Операции над книгами
 app.post("/book", authMiddleware, addBookValidator, bookController.createBook);

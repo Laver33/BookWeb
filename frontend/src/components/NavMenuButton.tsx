@@ -4,12 +4,14 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 const NavMenuButton = () => {
+  const navigate = useNavigate();
+
   const menuData = [
-    { id: 1, name: "Книги", path: "/books" },
-    { id: 2, name: "Топ авторов", path: "/top" },
+    { id: 1, name: "Книги", action: () => navigate("/books") },
+    { id: 2, name: "Топ авторов", action: () => navigate("/top") },
   ];
 
   return (
@@ -19,13 +21,12 @@ const NavMenuButton = () => {
       </NavigationMenuTrigger>
       <NavigationMenuContent className="bg-gray-900 dark:bg-gray-100 text-gray-400  rounded-xl shadow-lg   p-2">
         {menuData.map((item) => (
-          <NavigationMenuLink>
-            <Link
-              to={item.path}
-              className="block px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              {item.name}
-            </Link>
+          <NavigationMenuLink
+            key={item.id}
+            onClick={item.action}
+            className="block px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            {item.name}
           </NavigationMenuLink>
         ))}
       </NavigationMenuContent>

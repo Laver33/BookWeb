@@ -1,59 +1,96 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import dotenv from "dotenv";
 
-// Создание тест аккаунта
-test("Create test acc", async ({ page }) => {
+dotenv.config({ path: "./tests/.env" });
+
+const BASE_URL = "http://localhost:5173/";
+
+const TEST_ACC = {
+  email: process.env.TEST_ACC_EMAIL || " ",
+  password: process.env.TEST_ACC_PASSWORD || "",
+};
+
+test.beforeEach(async ({ page }) => {
+  await page.goto(BASE_URL);
+});
+
+// Регистрация и вход в систему
+test("should register new user", async ({ page }) => {
   const testName = faker.person.firstName();
   const testSurname = faker.person.lastName();
   const testEmail = faker.internet.email();
-  const testPassword = faker.internet.password();
-  const testAge = faker.number.int({ min: 1, max: 100 });
+  const testPassword = faker.internet.password({ length: 10 });
+  const testAge = faker.number.int({ min: 18, max: 80 });
 
-  await page.goto("http://localhost:5173/register");
-  await page.getByRole("textbox", { name: "Имя" }).click();
-  await page.getByRole("textbox", { name: "Имя" }).press("CapsLock");
-  await page.getByRole("textbox", { name: "Имя" }).fill("");
-  await page.getByRole("textbox", { name: "Имя" }).press("CapsLock");
-  await page.getByRole("textbox", { name: "Имя" }).fill("");
-  await page.getByRole("textbox", { name: "Имя" }).press("CapsLock");
+  await page.getByRole("button", { name: "Нету аккаунта" }).click();
+
   await page.getByRole("textbox", { name: "Имя" }).fill(testName);
-  await page.getByRole("textbox", { name: "Фамилия" }).click();
-  await page.getByRole("textbox", { name: "Фамилия" }).press("CapsLock");
   await page.getByRole("textbox", { name: "Фамилия" }).fill(testSurname);
-  await page.getByRole("spinbutton", { name: "Возраст" }).click();
-  await page.getByRole("spinbutton", { name: "Возраст" }).fill(`${testAge}`);
-  await page.getByRole("textbox", { name: "Email" }).click();
+  await page.getByRole("spinbutton", { name: "Возраст" }).fill(String(testAge));
   await page.getByRole("textbox", { name: "Email" }).fill(testEmail);
-  await page.getByRole("textbox", { name: "Пароль", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Пароль", exact: true })
     .fill(testPassword);
-  await page.getByRole("textbox", { name: "Подтвердите пароль" }).click();
+  await page
+    .getByRole("textbox", { name: "Подтвердите пароль" })
+    .fill(testPassword);
+
+  // Отправка формы
+  await page.getByRole("button", { name: "Зарегистрироваться" }).click();
+
+  await expect(page).toHaveURL(BASE_URL);
+});
+
+// -
+test("should login with existing account", async ({ page }) => {
+  await page.getByRole("textbox", { name: "Email" }).fill(TEST_ACC.email);
+  await page.getByRole("textbox", { name: "Пароль" }).fill(TEST_ACC.password);
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
+
+  // Проверка успешного входа
+  await expect(page.getByText("Добро пожаловать")).toBeVisible();
+  await expect(page).toHaveURL(`${BASE_URL}home`);
+});
+
+test("should login as guest", async ({ page }) => {
+  await page.getByRole("button", { name: "Войти как гость" }).click();
+  await expect(page).toHaveURL(`${BASE_URL}home`);
+});
+
+test("should navigate from register to login", async ({ page }) => {
+  await page.getByRole("button", { name: "Нету аккаунта" }).click();
+  await expect(page).toHaveURL(/.*register/);
+
+  await page.getByRole("button", { name: "Уже есть аккаунт" }).click();
+});
+
+test("should register and login with new account", async ({ page }) => {
+  const testName = faker.person.firstName();
+  const testSurname = faker.person.lastName();
+  const testEmail = faker.internet.email();
+  const testPassword = faker.internet.password({ length: 10 });
+  const testAge = faker.number.int({ min: 18, max: 80 });
+
+  // Регистрация
+  await page.getByRole("button", { name: "Нету аккаунта" }).click();
+  await page.getByRole("textbox", { name: "Имя" }).fill(testName);
+  await page.getByRole("textbox", { name: "Фамилия" }).fill(testSurname);
+  await page.getByRole("spinbutton", { name: "Возраст" }).fill(String(testAge));
+  await page.getByRole("textbox", { name: "Email" }).fill(testEmail);
+  await page
+    .getByRole("textbox", { name: "Пароль", exact: true })
+    .fill(testPassword);
   await page
     .getByRole("textbox", { name: "Подтвердите пароль" })
     .fill(testPassword);
   await page.getByRole("button", { name: "Зарегистрироваться" }).click();
-});
 
-// С окна регистрации на логин и войти
-test("login on test acc", async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  await page.getByRole("textbox", { name: "Email" }).click();
-  await page.getByRole("textbox", { name: "Email" }).fill("testacc@gmail.com");
-  await page.getByRole("textbox", { name: "Пароль" }).click();
-  await page.getByRole("textbox", { name: "Пароль" }).fill("test1234test");
-  await page.getByRole("button", { name: "Войти" }).click();
-});
+  // Логин
+  await expect(page).toHaveURL(BASE_URL);
+  await page.getByRole("textbox", { name: "Email" }).fill(testEmail);
+  await page.getByRole("textbox", { name: "Пароль" }).fill(testPassword);
+  await page.getByRole("button", { name: "Войти", exact: true }).click();
 
-// От окна логина на главную
-test("login to home", async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  await page.getByRole("button", { name: "Войти как гость" }).click();
-});
-
-// ОТ окна регистрации на главную
-test("register to home", async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  await page.getByRole("button", { name: "Нету аккаунта" }).click();
-  await page.getByRole("button", { name: "Войти как гость" }).click();
+  await expect(page).toHaveURL(`${BASE_URL}home`);
 });

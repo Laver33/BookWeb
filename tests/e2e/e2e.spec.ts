@@ -1,67 +1,65 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import dotenv from "dotenv";
 
-// Вход -> главная -> книги -> топ авторов
-test("Open home page", async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  await page.getByRole("textbox", { name: "Email" }).click();
-  await page
-    .getByRole("textbox", { name: "Email" })
-    .fill("pad666444@gmail.com");
-  await page.getByRole("textbox", { name: "Пароль" }).click();
-  await page.getByRole("textbox", { name: "Пароль" }).fill("admin12345");
+dotenv.config({ path: "./tests/.env" });
+
+const BASE_URL = "http://localhost:5173";
+const TEST_ACC_EMAIL: string = process.env.TEST_ACC_EMAIL || "";
+const TEST_ACC_PASSWORD: string = process.env.TEST_ACC_PASSWORD || "";
+
+if (!TEST_ACC_EMAIL || !TEST_ACC_PASSWORD) {
+  throw new Error(
+    "TEST_ACC_EMAIL and TEST_ACC_PASSWORD must be set in tests/.env",
+  );
+}
+
+const TEST_USER = {
+  email: TEST_ACC_EMAIL,
+  password: TEST_ACC_PASSWORD,
+};
+
+test.beforeEach(async ({ page }) => {
+  await page.goto(BASE_URL);
+  await page.getByRole("textbox", { name: "Email" }).fill(TEST_USER.email);
+  await page.getByRole("textbox", { name: "Пароль" }).fill(TEST_USER.password);
   await page.getByRole("button", { name: "Войти", exact: true }).click();
-  await page.getByRole("link", { name: "Начать читать" }).click();
-  await page.getByRole("button", { name: "Перейти" }).nth(1).click();
-  await page.getByRole("button", { name: "Перейти" }).nth(2).click();
-  await page.getByRole("link", { name: "Книги" }).click();
-  await page.getByRole("button", { name: "Топ авторов" }).click();
+  await expect(page.getByText("Добро пожаловать")).toBeVisible();
 });
 
-// Переход на книгу и лайк
-test("Test like book", async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  await page.getByRole("textbox", { name: "Email" }).click();
-  await page
-    .getByRole("textbox", { name: "Email" })
-    .fill("pad666444@gmail.com");
-  await page.getByRole("textbox", { name: "Пароль" }).click();
-  await page.getByRole("textbox", { name: "Пароль" }).fill("admin12345");
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
+test("should navigate to top authors", async ({ page }) => {
+  await page.getByRole("link", { name: "Начать читать" }).click();
+  await page.getByRole("button", { name: "Перейти" }).first().click();
+  await page.getByRole("button", { name: "Меню" }).hover();
+  await page.getByText("Книги", { exact: true }).click();
+
+  await page.getByRole("button", { name: "Топ авторов" }).click();
+  await expect(page.getByText("Топ авторов")).toBeVisible();
+});
+
+// исправить
+test("should like a book", async ({ page }) => {
   await page.getByRole("link", { name: "Книги" }).click();
   await page.getByRole("button", { name: "Перейти" }).first().click();
   await page.getByRole("button", { name: "Понравилась книга" }).click();
+
+  await expect(page.getByText("Книга добавлена в избранное")).toBeVisible();
 });
 
-// Добавление книги
-test("Test add book", async ({ page }) => {
-  const bookTitle = faker.lorem.words({ min: 2, max: 30 });
-  const bookDescription = faker.lorem.paragraph({ min: 20, max: 3000 });
+// исправить
+test("should add a new book", async ({ page }) => {
+  const bookTitle = faker.lorem.words({ min: 2, max: 5 });
+  const bookDescription = faker.lorem.paragraph();
   const bookPrice = faker.number.int({ min: 1, max: 100 });
 
-  await page.goto("http://localhost:5173/");
-  await page.getByRole("textbox", { name: "Email" }).click();
-  await page
-    .getByRole("textbox", { name: "Email" })
-    .fill("pad666444@gmail.com");
-  await page.getByRole("textbox", { name: "Пароль" }).click();
-  await page.getByRole("textbox", { name: "Пароль" }).fill("admin12345");
-  await page.getByRole("button", { name: "Войти", exact: true }).click();
   await page.getByRole("link", { name: "Книги" }).click();
   await page.getByRole("button", { name: "Добавить книгу" }).click();
-  await page.locator('input[name="title"]').fill("testbook");
+
   await page.locator('input[name="title"]').fill(bookTitle);
-  await page.locator('input[name="title"]').press("ControlOrMeta+a");
-  await page.locator('input[name="title"]').press("ControlOrMeta+c");
-  await page.locator('input[name="description"]').click();
-  await page.locator('input[name="description"]').fill("testbookNameE2E ");
-  await page.locator('input[name="description"]').press("ControlOrMeta+a");
-  await page.locator('input[name="description"]').press("ControlOrMeta+c");
-  await page.locator('input[name="description"]').press("ArrowRight");
   await page.locator('input[name="description"]').fill(bookDescription);
-  await page.getByRole("spinbutton").click();
-  await page.getByRole("spinbutton").fill(`${bookPrice}`);
+  await page.getByRole("spinbutton").fill(String(bookPrice));
   await page.getByRole("button", { name: "Добавить книгу" }).click();
-  await page.getByRole("button", { name: "Очистка" }).click();
+
+  await expect(page.getByText("Книга добавлена")).toBeVisible();
   await page.getByRole("button", { name: "Close", exact: true }).click();
 });

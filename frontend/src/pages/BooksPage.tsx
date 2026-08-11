@@ -54,7 +54,10 @@ const BooksPage = () => {
           <p className="text-center font-semibold text-lg">Популярные книги</p>
           <motion.div className="grid mt-2 gap-5 text-black py-2">
             {topViewBooks.map((item) => (
-              <motion.div className="rounded-lg shadow-md py-2 shadow-gray-400 dark:shadow-gray-300 dark:ring px-4">
+              <motion.div
+                key={item.id}
+                className="rounded-lg shadow-md py-2 shadow-gray-400 dark:shadow-gray-300 dark:ring px-4"
+              >
                 <p className="dark:text-white">{item.title}</p>
                 <p className="break-all text-gray-600 dark:text-gray-400 ">
                   <span className="font-medium text-black dark:text-white">

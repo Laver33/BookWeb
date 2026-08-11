@@ -8,11 +8,12 @@ import {
   NavigationMenu,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import NavProfileButton from "./NavProfileButton";
 
 type ThemeType = "light" | "dark";
 
 const Navigate = (props: { theme: ThemeType; toggleTheme: () => void }) => {
-  const { token, logout } = useAuthorStore();
+  const { token } = useAuthorStore();
 
   const NAVIGATE = [
     {
@@ -56,13 +57,7 @@ const Navigate = (props: { theme: ThemeType; toggleTheme: () => void }) => {
               Войти
             </Link>
           ) : (
-            <Link
-              onClick={logout}
-              to="/"
-              className="hover:bg-gray-200 hover:text-black dark:hover:bg-gray-800 dark:hover:text-white duration-700 transition-colors px-5 py-1.5 rounded-3xl"
-            >
-              Выйти
-            </Link>
+            <NavProfileButton />
           )}
         </NavigationMenuList>
       </NavigationMenu>

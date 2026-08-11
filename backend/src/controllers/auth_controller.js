@@ -118,3 +118,43 @@ export const loginAuthor = async (req, res) => {
     });
   }
 };
+
+export const getMe = async (req, res) => {
+  try {
+    const user = await prisma.author.findUnique({
+      where: { id: req.user.id },
+      select: {
+        id: true,
+        name: true,
+        surname: true,
+        email: true,
+        age: true,
+        description: true,
+        createdAt: true,
+        totalLikes: true,
+        totalViews: true,
+        totalRecommendations: true,
+        books: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            price: true,
+            likes: true,
+            views: true,
+            recommendations: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    res.status(200).json(user);
+  } catch (e) {
+    console.error("Ошибка получения данных:", e);
+    res.status(500).json({ message: "Ошибка получения данных" });
+  }
+};

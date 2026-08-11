@@ -76,7 +76,6 @@ export const deleteNote = async (req, res) => {
 
     res.status(200).json({
       message: "Заметка успешно удалена",
-      note: delNote,
     });
   } catch (e) {
     res.status(500).json({
