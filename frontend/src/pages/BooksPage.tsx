@@ -5,19 +5,14 @@ import useBookStore from "../store/bookStore.ts";
 import DialogAddBook from "@/components/DialogAddBook.tsx";
 import useAuthorStore from "@/store/authorStore.ts";
 import NoAuthDialog from "@/components/NoAuthDialog.tsx";
-import { useMemo } from "react";
 import BookButton from "@/components/BookButton.tsx";
-import { FaEye } from "react-icons/fa";
+import PopularBooks from "@/components/PopularBooks.tsx";
 
 const BooksPage = () => {
   useFetchAllData();
   const { token } = useAuthorStore();
   const { books } = useBookStore();
   const navigate = useNavigate();
-
-  const topViewBooks = useMemo(() => {
-    return [...books].sort((a, b) => b.views - a.views).slice(0, 3);
-  }, [books]);
 
   return (
     <div className="flex gap-12 px-16 pt-16">
@@ -45,37 +40,7 @@ const BooksPage = () => {
           </motion.button>
         </div>
 
-        <motion.div
-          animate={{ opacity: 1, y: 0 }}
-          initial={{ opacity: 0, y: 30 }}
-          transition={{ duration: 1 }}
-          className="bg-white/80 w-full backdrop-blur-sm  dark:bg-black rounded-lg shadow-xl p-4 sm:grid border border-amber-100"
-        >
-          <p className="text-center font-semibold text-lg">Популярные книги</p>
-          <motion.div className="grid mt-2 gap-5 text-black py-2">
-            {topViewBooks.map((item) => (
-              <motion.div
-                key={item.id}
-                className="rounded-lg shadow-md py-2 shadow-gray-400 dark:shadow-gray-300 dark:ring px-4"
-              >
-                <p className="dark:text-white">{item.title}</p>
-                <p className="break-all text-gray-600 dark:text-gray-400 ">
-                  <span className="font-medium text-black dark:text-white">
-                    Описание:{" "}
-                  </span>
-                  {item.description.slice(0, 50)}
-                </p>
-                <div className="flex items-center justify-center">
-                  <div className="flex items-center gap-2 w-2/3 dark:text-white">
-                    <FaEye />
-                    <p>{item.views || 0}</p>
-                  </div>
-                  <BookButton item={item} />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
+        <PopularBooks />
       </motion.section>
 
       {/* Список книг */}

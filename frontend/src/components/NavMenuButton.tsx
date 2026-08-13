@@ -16,10 +16,10 @@ const NavMenuButton = () => {
 
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="hover:bg-gray-200 hover:text-black dark:hover:bg-gray-800 dark:hover:text-white duration-700 transition-colors px-5 py-1.5 rounded-3xl bg-transparent data-[state=open]:bg-gray-200 dark:data-[state=open]:bg-gray-800">
+      <NavigationMenuTrigger className="hover:bg-gray-200 dark:hover:bg-gray-800 dark:hover:text-white duration-700 transition-colors px-4 py-1.5 rounded-3xl bg-transparent data-[state=open]:bg-gray-200 dark:data-[state=open]:bg-gray-800">
         Меню
       </NavigationMenuTrigger>
-      <NavigationMenuContent className="bg-gray-900 dark:bg-gray-100 text-gray-400  rounded-xl shadow-lg   p-2">
+      <NavigationMenuContent className="text-gray-400 rounded-xl shadow-lg p-2">
         {menuData.map((item) => (
           <NavigationMenuLink
             key={item.id}
